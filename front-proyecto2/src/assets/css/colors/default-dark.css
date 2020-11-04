@@ -104,17 +104,17 @@ a.link:hover, a.link:focus {
 *******************/
 .card-no-border .left-sidebar,
 .card-no-border .sidebar-nav {
-  background: #7F0101; }
+  background: #2E5902; }
 
 .mini-sidebar .sidebar-nav {
   background: transparent; }
 
 @media (min-width: 768px) {
   .mini-sidebar .sidebar-nav #sidebarnav > li > ul {
-    background: #7F0101; } }
+    background: #2E5902; } }
 
 .sidebar-nav {
-  background: #7F0101; }
+  background: #2E5902; }
 
 .user-profile .profile-text a {
   color: #687384 !important; }
@@ -141,4 +141,4 @@ a.link:hover, a.link:focus {
 
 @media (min-width: 768px) {
   .mini-sidebar .sidebar-nav #sidebarnav > li:hover > a {
-    background: #7F0101; } }
+    background: #2E5902; } }
