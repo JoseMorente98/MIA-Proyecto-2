@@ -14,12 +14,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PageModule } from './page/page.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RecoveryComponent } from './recovery/recovery.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegistroComponent
+    RegistroComponent,
+    RecoveryComponent
   ],
   imports: [
     CommonModule,

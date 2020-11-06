@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UsuarioService } from '../service/usuario.service';
 
 //JQUERY
 declare var $:any;
+//SWAL
+declare var swal:any;
 
 @Component({
   selector: 'app-login',
@@ -12,6 +15,8 @@ declare var $:any;
 })
 export class LoginComponent implements OnInit {
   formData:FormGroup;
+  formRecovery:FormGroup;
+  parameter:any;
   options = {
     position: ["bottom", "right"],
     timeOut: 2000,
@@ -25,11 +30,21 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(
-    private router: Router
+    private router: Router,
+    private usuarioService: UsuarioService,
+    private activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+    this.parameter = this.activatedRoute.snapshot.paramMap.get('id');
+    if(this.parameter) {
+      console.log(this.parameter)
+      this.activar()
+    }
     this.initializeForm();
+    this.initializeFormRecovery();
+    $("#recoverform").slideUp();
+    $("#loginform").fadeIn();
   }
 
   initializeForm() {
@@ -39,37 +54,85 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  initializeFormRecovery() {
+    this.formRecovery = new FormGroup({
+      'email': new FormControl('', [Validators.required])
+    });
+  }
+
   logIn() {
-    /*this.authService.auth(data)
+    this.usuarioService.auth(this.formData.value)
     .subscribe((res) => {
-      //console.log(res)
-      localStorage.setItem("currentId", res.taxis_usuarios_id);
+      console.log(res)
+
+      if(res.activo == "Inactivo") {
+        swal({
+          title: "Advertencia",
+          text: "Tu usuario no ha sido activado.",
+          icon: "warning",
+        });
+      } else {
+        swal({
+          title: "Bienvenido",
+          text: "Bienvenido a Marketplace.",
+          icon: "success",
+        });
+      }
+      
+      /*localStorage.setItem("currentId", res.taxis_usuarios_id);
       localStorage.setItem("currentEmail", res.taxis_usuarios_email);
       localStorage.setItem("currentNombre", res.taxis_usuarios_nombre);
       localStorage.setItem("currentPicture", res.taxis_img);
       localStorage.setItem("currentAuth", 'Admin');
       this.getSingle(res.taxis_usuarios_id);
       this.notificationsService.success('Exito', 'Sesion iniciada, bienvenido.');
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['dashboard']);*/
     }, (err) => {
-      //this.notificationsService.error('Error', 'El correo o contraseña son incorrectos.');
-      //console.log(err);
-        this.usuarioService.login(this.formData.value)
-        .subscribe((res) => {
-          //console.log(res)
-          localStorage.setItem("currentId", res.id);
-          localStorage.setItem("currentEmail", this.formData.value.email);
-          localStorage.setItem("currentNombre", res.nombre);
-          localStorage.setItem("currentApellido", res.apellido);
-          localStorage.setItem("currentAuth", 'User');
-          localStorage.setItem('currentCart', JSON.stringify([]));
-          this.notificationsService.success('Exito', 'Sesion iniciada, bienvenido.');
-          this.router.navigate(['ubicacion']);
-        }, (err) => {
-          this.notificationsService.error('Error', 'El correo o contraseña son incorrectos.');
-          //console.log(err);
-        });
-    });*/
+      swal({
+        title: "Error",
+        text: "El correo o contraseña son incorrectos.",
+        icon: "error",
+      });
+    });
+  }
+
+  recovery() {
+    this.usuarioService.recovery(this.formRecovery.value)
+    .subscribe((res) => {
+      console.log(res)
+      swal({
+        title: "Correo Enviado",
+        text: "Hemos enviado un correo a: "+res.email,
+        icon: "success",
+      });
+    }, (err) => {
+      swal({
+        title: "Error",
+        text: "No se ha encontrado el correo registrado.",
+        icon: "error",
+      });
+    });
+  }
+
+  activar() {
+    let data = {
+      email: this.parameter
+    }
+    this.usuarioService.activar(data)
+    .subscribe((res) => {
+      console.log(res)
+      swal({
+        title: "Cuenta activa",
+        text: "Hemos activado tu cuenta exitosamente.",
+        icon: "success",
+      });
+    }, (err) => {
+      swal({
+        title: "Error",
+        text: "Ha ocurrido un error. Intente mas tarde nuevamente.",
+        icon: "error",
+      });
+    });
   }
 
   openRecovery = () => {
@@ -83,6 +146,7 @@ export class LoginComponent implements OnInit {
   }
 
   get email() { return this.formData.get('email'); }
+  get correo() { return this.formRecovery.get('email'); }
   get password() { return this.formData.get('password'); }
 
 }

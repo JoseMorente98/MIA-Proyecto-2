@@ -28,9 +28,9 @@
                 </div>
                 <div class="form-group m-t-40">
                     <div class="col-xs-12">
-                        <select class="form-control">
+                        <select class="form-control" formControlName="pais" name="pais">
                             <option selected>Seleccionar un pais...</option>
-                            <option>1</option>
+                            <option value="{{item.id}}" *ngFor="let item of data">{{item.nombre}}</option>
                             <option>2</option>
                             <option>3</option>
                             <option>4</option>
