@@ -1,8 +1,8 @@
 import { query, Response } from 'express';
 import OracleConnection from '../oracle/oracle';
 
-export default class ProductoController {
-    private static _instance: ProductoController;
+export default class BitacoraController {
+    private static _instance: BitacoraController;
 
     constructor(
     ) {
@@ -14,7 +14,7 @@ export default class ProductoController {
 
     getAll = async (req: any, res: Response) => {
         const query = `
-            SELECT * FROM PRODUCTO
+            SELECT * FROM BITACORA
         `;
         
         let result:any = await OracleConnection.selectQuery(query);
@@ -23,13 +23,7 @@ export default class ProductoController {
             result.rows.map((element: any[]) => {
                 let dataSchema = {
                     "id": element[0],
-                    "nombre": element[1],
-                    "descripcion": element[2],
-                    "clave": element[3],
-                    "picture": element[4],
-                    "precio": element[5],
-                    "categoria": element[6],
-                    "usuario": element[7],
+                    "nombre": element[1]
                 }
                 data.push(dataSchema);
             });
@@ -50,7 +44,7 @@ export default class ProductoController {
         }
 
         const query = `
-            SELECT * FROM PRODUCTO WHERE id = ${body.id}
+            SELECT * FROM BITACORA WHERE id = ${body.id}
         `;
         
         let result:any = await OracleConnection.selectQuery(query);
@@ -59,13 +53,7 @@ export default class ProductoController {
             result.rows.map((element: any[]) => {
                 let dataSchema = {
                     "id": element[0],
-                    "nombre": element[1],
-                    "descripcion": element[2],
-                    "clave": element[3],
-                    "picture": element[4],
-                    "precio": element[5],
-                    "categoria": element[6],
-                    "usuario": element[7],
+                    "nombre": element[1]
                 }
                 data.push(dataSchema);
             });
@@ -90,19 +78,15 @@ export default class ProductoController {
 
     create = async (req: any, res: Response) => {
         let body = {
-            nombre: req.body.nombre,
             descripcion: req.body.descripcion,
-            clave: req.body.clave,
-            picture: req.body.picture,
-            precio: req.body.precio,
-            categoria: req.body.categoria,
+            producto: req.body.producto,
             usuario: req.body.usuario,
         }
 
         const query = `
-            INSERT INTO PRODUCTO(nombre, descripcion, clave, picture, precio, categoria, usuario) 
-            VALUES ('${body.nombre}', '${body.descripcion}', '${body.clave}',
-            '${body.picture}', ${body.precio}, ${body.categoria}, ${body.usuario})
+            INSERT INTO BITACORA(descripcion, usuario) 
+            VALUES ('${body.descripcion}',
+            ${body.usuario})
         `;
         
         let result:any = await OracleConnection.executeQuery(query);
@@ -123,25 +107,13 @@ export default class ProductoController {
 
     update = async (req: any, res: Response) => {
         let body = {
-            nombre: req.body.nombre,
             descripcion: req.body.descripcion,
-            clave: req.body.clave,
-            picture: req.body.picture,
-            precio: req.body.precio,
-            categoria: req.body.categoria,
-            usuario: req.body.usuario,
             id : req.params.id
         }
 
         const query = `
-            UPDATE PRODUCTO SET 
-            nombre = '${body.nombre}',
-            descripcion = '${body.descripcion}',
-            clave = '${body.clave}',
-            picture = '${body.picture}',
-            precio = '${body.precio}',
-            categoria = '${body.categoria}',
-            usuario = '${body.usuario}'
+            UPDATE BITACORA SET 
+            descripcion = '${body.descripcion}'
             WHERE id = ${body.id}
         `;
         
@@ -167,7 +139,7 @@ export default class ProductoController {
         }
 
         const query = `
-            DELETE FROM PRODUCTO WHERE id = ${body.id}
+            DELETE FROM BITACORA WHERE id = ${body.id}
         `;
         
         let result:any = await OracleConnection.executeQuery(query);

@@ -78,15 +78,13 @@ export class LoginComponent implements OnInit {
           icon: "success",
         });
       }
-      
-      /*localStorage.setItem("currentId", res.taxis_usuarios_id);
-      localStorage.setItem("currentEmail", res.taxis_usuarios_email);
-      localStorage.setItem("currentNombre", res.taxis_usuarios_nombre);
-      localStorage.setItem("currentPicture", res.taxis_img);
-      localStorage.setItem("currentAuth", 'Admin');
-      this.getSingle(res.taxis_usuarios_id);
-      this.notificationsService.success('Exito', 'Sesion iniciada, bienvenido.');
-      this.router.navigate(['dashboard']);*/
+      localStorage.setItem("currentId", res.id);
+      localStorage.setItem("currentAuth", res.rol);
+      localStorage.setItem("currentCart", '[]');
+      localStorage.setItem("currentPicture", res.picture);
+      localStorage.setItem("currentEmail", res.email);
+      localStorage.setItem("currentNombre", res.nombre + " " + res.apellido);
+      this.router.navigate(['dashboard']);
     }, (err) => {
       swal({
         title: "Error",

@@ -7,7 +7,7 @@ import { path } from '../config.module';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductoService {
+export class LikeService {
 
   private basePath:string = path.path;
   private httpOptions = {
@@ -32,7 +32,7 @@ export class ProductoService {
   };
 
   public getAll() : Observable<any> {
-    let url = `${this.basePath}producto`;
+    let url = `${this.basePath}like`;
     return this.http.get(url, this.httpOptions)
     .pipe(
       catchError(this.handleError)
@@ -40,7 +40,7 @@ export class ProductoService {
   }
 
   public getSingle(id:any) : Observable<any> {
-    let url = `${this.basePath}producto/${id}`;
+    let url = `${this.basePath}like/${id}`;
     return this.http.get(url, this.httpOptions)
     .pipe(
       catchError(this.handleError)
@@ -48,7 +48,7 @@ export class ProductoService {
   }
   
   public create(data:any) : Observable<any> {
-    let url = `${this.basePath}producto`;
+    let url = `${this.basePath}like`;
     return this.http.post(url, data, this.httpOptions)
     .pipe(
       catchError(this.handleError)
@@ -56,7 +56,7 @@ export class ProductoService {
   }
 
   public update(data:any) : Observable<any> {
-    let url = `${this.basePath}producto/${data.id}`;
+    let url = `${this.basePath}like/${data.id}`;
     return this.http.put(url, data, this.httpOptions)
     .pipe(
       catchError(this.handleError)
@@ -64,7 +64,7 @@ export class ProductoService {
   }
 
   public delete(id:any) : Observable<any> {
-    let url = `${this.basePath}producto/${id}`;
+    let url = `${this.basePath}like/${id}`;
     return this.http.delete(url, this.httpOptions)
     .pipe(
       catchError(this.handleError)

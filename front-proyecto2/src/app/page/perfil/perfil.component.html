@@ -15,14 +15,16 @@
 
 <div class="row">
     <!-- Column -->
-    <div class="col-lg-4 col-xlg-3 col-md-5">
+    <div class="col-lg-4 col-xlg-3 col-md-5" *ngIf="data">
         <div class="card">
             <div class="card-body">
-                <div class="m-t-30" style="text-align: center;"> <img src="../assets/images/users/5.jpg" class="img-circle" width="150" />
-                    <h4 class="card-title m-t-10">Hanna Gover</h4>
-                    <h6 class="card-subtitle">Accoubts Manager Amix corp</h6>
+                <div class="m-t-30" style="text-align: center;"> 
+                    <img  *ngIf="!file" src="{{data.picture}}" class="img-circle" width="150" />
+                    <img  *ngIf="file" src="{{strImage}}" class="img-circle" width="150" />
+                    <h4 class="card-title m-t-10">{{data.nombre}} {{data.apellido}}</h4>
+                    <h6 class="card-subtitle">{{data.email}}</h6>
                     <div class="row text-center justify-content-md-center">
-                        <div class="col-6"><a href="javascript:void(0)" class="link"><i class="icon-wallet"></i> <small class="font-medium"> Q10000.00</small></a></div>
+                        <div class="col-6"><a href="javascript:void(0)" class="link"><i class="icon-wallet"></i> <small class="font-medium"> Q {{data.credito | number : '1.2-2'}}</small></a></div>
                     </div>
                 </div>
             </div>
@@ -44,52 +46,53 @@
                 <!--second tab-->
                 <div class="tab-pane active" id="settings" role="tabpanel">
                     <div class="card-body">
-                        <form class="form-horizontal form-material">
+                        <form class="form-horizontal form-material" [formGroup]="formData" (ngSubmit)="saveChanges()">
                             <div class="form-group">
-                                <label class="col-md-12">Full Name</label>
+                                <label>Seleccionar Imagen</label>
+                                <input (change)="seleccionImage($event.target.files[0])" type="file" class="form-control" id="exampleInputFile" aria-describedby="fileHelp" >
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">Nombre</label>
                                 <div class="col-md-12">
-                                    <input type="text" placeholder="Johnathan Doe" class="form-control form-control-line">
+                                    <input type="text" placeholder="Nombre" formControlName="nombre" name="nombre" class="form-control form-control-line">
+                                    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                                        <div class="alert alert-danger" role="alert" *ngIf="nombre.errors.required">
+                                            El nombre es requerido
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="example-email" class="col-md-12">Email</label>
+                                <label class="col-md-12">Apellido</label>
                                 <div class="col-md-12">
-                                    <input type="email" placeholder="johnathan@admin.com" class="form-control form-control-line" name="example-email" id="example-email">
+                                    <input type="text" placeholder="Apellido" formControlName="apellido" name="apellido" class="form-control form-control-line">
+                                    <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
+                                        <div class="alert alert-danger" role="alert" *ngIf="apellido.errors.required">
+                                            El apellido es requerido
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-12">Password</label>
+                                <label class="col-md-12">Correo Electronico</label>
                                 <div class="col-md-12">
-                                    <input type="password" value="password" class="form-control form-control-line">
+                                    <input type="email" placeholder="Email" formControlName="email" name="email" disabled class="form-control form-control-line">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-12">Phone No</label>
+                                <label class="col-md-12">Fecha de Nacimiento</label>
                                 <div class="col-md-12">
-                                    <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
+                                    <input type="date" formControlName="fecha" name="fecha" class="form-control form-control-line">
+                                    <div *ngIf="fecha.invalid && (fecha.dirty || fecha.touched)">
+                                        <div class="alert alert-danger" role="alert" *ngIf="fecha.errors.required">
+                                            El fecha es requerido
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-12">Message</label>
-                                <div class="col-md-12">
-                                    <textarea rows="5" class="form-control form-control-line"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-12">Select Country</label>
                                 <div class="col-sm-12">
-                                    <select class="form-control form-control-line">
-                                        <option>London</option>
-                                        <option>India</option>
-                                        <option>Usa</option>
-                                        <option>Canada</option>
-                                        <option>Thailand</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <button class="btn btn-success text-uppercase btn-rounded">Guardar Cambios</button>
+                                    <button type="submit" class="btn btn-success text-uppercase btn-rounded">Guardar Cambios</button>
                                 </div>
                             </div>
                         </form>
@@ -97,23 +100,32 @@
                 </div>
                 <div class="tab-pane" id="home" role="tabpanel">
                     <div class="card-body">
-                        <form class="form-horizontal form-material">
-                            <div class="form-group">
-                                <label for="example-email" class="col-md-12">Contraseña actual</label>
-                                <div class="col-md-12">
-                                    <input type="password" class="form-control form-control-line" name="example-email" id="example-email">
-                                </div>
-                            </div>
+                        <form class="form-horizontal form-material" [formGroup]="formReset" (ngSubmit)="recovery()">
                             <div class="form-group">
                                 <label for="example-email" class="col-md-12">Contraseña nueva</label>
                                 <div class="col-md-12">
-                                    <input type="password" class="form-control form-control-line" name="example-email" id="example-email">
+                                    <input type="password" class="form-control form-control-line" formControlName="password" name="password">
+                                    <div *ngIf="password.invalid && (password.dirty || password.touched)">
+                                        <div class="alert alert-danger" role="alert" *ngIf="password.errors.required">
+                                            La contraseña es requerida
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="example-email" class="col-md-12">Confirmar contraseña</label>
                                 <div class="col-md-12">
-                                    <input type="password" class="form-control form-control-line" name="example-email" id="example-email">
+                                    <input type="password" class="form-control form-control-line" formControlName="passwordrepeat" name="passwordrepeat">
+                                    <div *ngIf="passwordrepeat.invalid && (passwordrepeat.dirty || passwordrepeat.touched)">
+                                        <div class="alert alert-danger" role="alert" *ngIf="passwordrepeat.errors.required">
+                                            La contraseña repetida es requerida
+                                        </div>
+                                    </div>
+                                    <div *ngIf="password.value != passwordrepeat.value">
+                                        <div class="alert alert-danger" role="alert">
+                                            Las contraseñas deben ser iguales 
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">

@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UploadFileService } from 'src/app/service/upload-file.service';
+import { CategoriaService } from 'src/app/service/categoria.service';
+
+//SWAL
+declare var swal:any;
+//JQUERY
+declare var $:any;
 
 @Component({
   selector: 'app-categorias',
@@ -26,18 +33,10 @@ export class CategoriasComponent implements OnInit {
     animate: "scale",
     maxLength: 400
   };
-  notificacion:any = {
-    estado: false,
-    mensaje: ""
-  }
-  notificacionError:any = {
-    estado: false,
-    mensaje: ""
-  }
 
   constructor(
-    //private uploadFileService: UploadFileService,
-    //private categoriaService: CategoriaService,
+    private uploadFileService: UploadFileService,
+    private categoriaService: CategoriaService,
     private router: Router
   ) { }
 
@@ -57,7 +56,7 @@ export class CategoriasComponent implements OnInit {
     this.formData = new FormGroup({
       'nombre': new FormControl('', [Validators.required, Validators.maxLength(50)]),
       'descripcion': new FormControl('', [Validators.required, Validators.maxLength(255)]),
-      'imagen': new FormControl(''),
+      'picture': new FormControl('https://res.cloudinary.com/devgea-s-a/image/upload/v1594950613/Finca%20Cienaguilla/mkdr6jfwkclzdzubuuwb.png'),
       'id': new FormControl(null),
     });
   }
@@ -77,7 +76,11 @@ export class CategoriasComponent implements OnInit {
     }
 
     if ( archivo.type.indexOf('image') < 0 ) {
-      this.notificationError('Debe de seleccionar una imagen.')
+      swal({
+        title: "Seleccionar imagen",
+        text: "Debe de seleccionar una imagen.",
+        icon: "info",
+      });
       this.file = null;
       return;
     }
@@ -93,45 +96,66 @@ export class CategoriasComponent implements OnInit {
   }
 
   uploadImage() {
-    /*this.uploadFileService.subirArchivo( this.file, 'Ecommerce/Categoria' )
+    this.uploadFileService.subirArchivo( this.file, 'MIA/Categoria' )
     .then((res:any) => {
       this.strImage = res.secure_url;
-      this.notification('La imagen se ha subido exitosamente.');
+      this.formData.get('picture').setValue(this.strImage);
+      swal({
+        title: "Foto cargada",
+        text: "La imagen se ha subido exitosamente.",
+        icon: "success",
+      });
     })
     .catch((resp) => {
-      this.notificationError('Ha ocurrido un error.')
-    });*/
+      swal({
+        title: "Error",
+        text: "Ha ocurrido un error. Intente mas tarde nuevamente.",
+        icon: "error",
+      });
+    });
   }
 
   create() {
-    /*if(this.strImage) {
-      this.formData.get('imagen').setValue(this.strImage);
-    }
+    console.log(this.formData.value)
     this.categoriaService.create(this.formData.value)
     .subscribe((res) => {
+      console.log(res)
       $('#modalFormDataAdd').modal('hide');
-      this.notificationsService.success('Exito', "La categoría ha sido registrada exitosamente.");
+      swal({
+        title: "Categoria Agregada",
+        text: "La categoría ha sido registrada exitosamente.",
+        icon: "success",
+      });
       this.getAll();
       this.initializeForm();
     }, (error) => {
-      this.notificationsService.error('Error', "Ha ocurrido un error, por favor intente nuevamente.");
-    });*/
+      swal({
+        title: "Error",
+        text: "Ha ocurrido un error. Intente mas tarde nuevamente.",
+        icon: "error",
+      });
+    });
   }
 
   update() {
-    /*if(this.strImage) {
-      this.formData.get('imagen').setValue(this.strImage);
-    }
     console.log(this.formData.value)
     this.categoriaService.update(this.formData.value)
     .subscribe((res) => {
       $('#modalFormDataUpdate').modal('hide');
-      this.notificationsService.success('Exito', "La categoría ha sido actualizada exitosamente.");
+      swal({
+        title: "Categoria Actualizada",
+        text: "La categoría ha sido actualizada exitosamente.",
+        icon: "success",
+      });
       this.getAll();
       this.initializeForm();
     }, (error) => {
-      this.notificationsService.error('Error', "Ha ocurrido un error, por favor intente nuevamente.");
-    });*/
+      swal({
+        title: "Error",
+        text: "Ha ocurrido un error. Intente mas tarde nuevamente.",
+        icon: "error",
+      });
+    });
   }
 
   delete() {
@@ -151,12 +175,13 @@ export class CategoriasComponent implements OnInit {
   }
 
   getAll() {
-    /*this.categoriaService.getAll()
+    this.categoriaService.getAll()
     .subscribe((res) => {
+      this.data = [];
       this.data = res;
     }, (error) => {
-      this.notificationsService.error('Error', "Ha ocurrido un error, por favor intente nuevamente.");
-    });*/
+      console.log("Ha ocurrido un error, por favor intente nuevamente.")
+    });
   }
 
   /**
@@ -165,7 +190,7 @@ export class CategoriasComponent implements OnInit {
   get nombre() { return this.formData.get('nombre'); }
   get nombreConfirm() { return this.formDataDelete.get('nombreConfirm'); }
   get descripcion() { return this.formData.get('descripcion'); }
-  get imagen() { return this.formData.get('imagen'); }
+  get picture() { return this.formData.get('picture'); }
   get id() { return this.formData.get('id'); }
 
   /**
@@ -175,30 +200,9 @@ export class CategoriasComponent implements OnInit {
     this.selectData = item;
     this.formData.get('nombre').setValue(item.nombre);
     this.formData.get('descripcion').setValue(item.descripcion);
-    this.formData.get('imagen').setValue(item.imagen);
+    this.formData.get('picture').setValue(item.picture);
     this.formData.get('id').setValue(item.id);
-    this.strImage = item.imagen;
-  }
-
-  /**
-   * NOTIFICACION 
-   */
-  notification(msj:String) {
-    this.notificacion.mensaje = msj;
-    this.notificacion.estado = true;
-    setTimeout(() => {
-        this.notificacion.mensaje = '';
-        this.notificacion.estado = '';
-    }, 2500);
-  }
-
-  notificationError(msj:String) {
-    this.notificacionError.mensaje = msj;
-    this.notificacionError.estado = true;
-    setTimeout(() => {
-        this.notificacionError.mensaje = '';
-        this.notificacionError.estado = '';
-    }, 2500);
+    this.strImage = item.picture;
   }
 
 }

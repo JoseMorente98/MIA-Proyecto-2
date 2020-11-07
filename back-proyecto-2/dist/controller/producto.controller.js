@@ -57,20 +57,17 @@ var ProductoController = /** @class */ (function () {
                             result.rows.map(function (element) {
                                 var dataSchema = {
                                     "id": element[0],
-                                    "nombre": element[1]
+                                    "nombre": element[1],
+                                    "descripcion": element[2],
+                                    "clave": element[3],
+                                    "picture": element[4],
+                                    "precio": element[5],
+                                    "categoria": element[6],
+                                    "usuario": element[7],
                                 };
                                 data_1.push(dataSchema);
                             });
-                            if (data_1.length > 0) {
-                                return [2 /*return*/, res.json(data_1[0])];
-                            }
-                            else {
-                                return [2 /*return*/, res.status(400).json({
-                                        ok: false,
-                                        status: 400,
-                                        error: "No existen datos."
-                                    })];
-                            }
+                            return [2 /*return*/, res.json(data_1)];
                         }
                         else {
                             return [2 /*return*/, res.status(400).json({
@@ -100,11 +97,26 @@ var ProductoController = /** @class */ (function () {
                             result.rows.map(function (element) {
                                 var dataSchema = {
                                     "id": element[0],
-                                    "nombre": element[1]
+                                    "nombre": element[1],
+                                    "descripcion": element[2],
+                                    "clave": element[3],
+                                    "picture": element[4],
+                                    "precio": element[5],
+                                    "categoria": element[6],
+                                    "usuario": element[7],
                                 };
                                 data_2.push(dataSchema);
                             });
-                            return [2 /*return*/, res.json(data_2[0])];
+                            if (data_2.length > 0) {
+                                return [2 /*return*/, res.json(data_2[0])];
+                            }
+                            else {
+                                return [2 /*return*/, res.status(400).json({
+                                        ok: false,
+                                        status: 400,
+                                        error: "No existen datos."
+                                    })];
+                            }
                         }
                         else {
                             return [2 /*return*/, res.status(400).json({

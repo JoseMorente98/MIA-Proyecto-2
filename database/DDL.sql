@@ -75,6 +75,7 @@ CREATE table "PRODUCTO" (
     "CLAVE"       VARCHAR2(255) NOT NULL,
     "PICTURE"     VARCHAR2(255),
     "PRECIO"      NUMBER(9,2),
+    "ESTADO"      NUMBER(9),
     "CATEGORIA"   NUMBER(9),
     "USUARIO"     NUMBER(9),
     constraint  "PRODUCTO_PK" primary key ("ID"),
@@ -116,5 +117,98 @@ CREATE trigger "BI_DENUNCIA"
 begin  
   if :NEW."ID" is null then
     select "DENUNCIA_SEQ".nextval into :NEW."ID" from dual;
+  end if;
+end;
+
+-- TABLA COMENTARIO
+CREATE table "COMENTARIO" (
+    "ID"          NUMBER(9) NOT NULL,
+    "DESCRIPCION" VARCHAR2(500) NOT NULL,
+    "FECHA"       DATE DEFAULT (sysdate),
+    "PRODUCTO"    NUMBER(9),
+    "USUARIO"     NUMBER(9),
+    constraint  "COMENTARIO_PK" primary key ("ID"),
+    CONSTRAINT "COMENTARIO_PRODUCTO_FK" FOREIGN KEY ("PRODUCTO") REFERENCES "PRODUCTO" ("ID"),
+    CONSTRAINT "COMENTARIO_USUARIO_FK" FOREIGN KEY ("USUARIO") REFERENCES "USUARIO" ("ID")
+);
+
+-- SECUENCIA INCREMENTABLE ID
+CREATE sequence "COMENTARIO_SEQ";
+
+CREATE trigger "BI_COMENTARIO"  
+  before insert on "COMENTARIO"              
+  for each row 
+begin  
+  if :NEW."ID" is null then
+    select "COMENTARIO_SEQ".nextval into :NEW."ID" from dual;
+  end if;
+end;
+
+-- TABLA MEGUSTA
+CREATE table "MEGUSTA" (
+    "ID"          NUMBER(9) NOT NULL,
+    "ESTADO"      NUMBER(9),
+    "PRODUCTO"    NUMBER(9),
+    "USUARIO"     NUMBER(9),
+    constraint  "MEGUSTA_PK" primary key ("ID"),
+    CONSTRAINT "MEGUSTA_PRODUCTO_FK" FOREIGN KEY ("PRODUCTO") REFERENCES "PRODUCTO" ("ID"),
+    CONSTRAINT "MEGUSTA_USUARIO_FK" FOREIGN KEY ("USUARIO") REFERENCES "USUARIO" ("ID")
+);
+
+-- SECUENCIA INCREMENTABLE ID
+CREATE sequence "MEGUSTA_SEQ";
+
+CREATE trigger "BI_MEGUSTA"  
+  before insert on "MEGUSTA"              
+  for each row 
+begin  
+  if :NEW."ID" is null then
+    select "MEGUSTA_SEQ".nextval into :NEW."ID" from dual;
+  end if;
+end;
+
+-- TABLA BITACORA
+CREATE table "BITACORA" (
+    "ID"          NUMBER(9) NOT NULL,
+    "DESCRIPCION" VARCHAR2(500) NOT NULL,
+    "FECHA"       DATE DEFAULT (sysdate),
+    "USUARIO"     NUMBER(9),
+    constraint  "BITACORA_PK" primary key ("ID"),
+    CONSTRAINT "BITACORA_USUARIO_FK" FOREIGN KEY ("USUARIO") REFERENCES "USUARIO" ("ID")
+);
+
+-- SECUENCIA INCREMENTABLE ID
+CREATE sequence "BITACORA_SEQ";
+
+CREATE trigger "BI_BITACORA"  
+  before insert on "BITACORA"              
+  for each row 
+begin  
+  if :NEW."ID" is null then
+    select "BITACORA_SEQ".nextval into :NEW."ID" from dual;
+  end if;
+end;
+
+-- TABLA MENSAJE
+CREATE table "MENSAJE" (
+    "ID"          NUMBER(9) NOT NULL,
+    "MENSAJE"     VARCHAR2(500) NOT NULL,
+    "FECHA"       DATE DEFAULT (sysdate),
+    "USUARIO1"     NUMBER(9),
+    "USUARIO2"     NUMBER(9),
+    constraint  "MENSAJE_PK" primary key ("ID"),
+    CONSTRAINT "MENSAJE_USUARIO1_FK" FOREIGN KEY ("USUARIO1") REFERENCES "USUARIO" ("ID"),
+    CONSTRAINT "MENSAJE_USUARIO2_FK" FOREIGN KEY ("USUARIO2") REFERENCES "USUARIO" ("ID")
+);
+
+-- SECUENCIA INCREMENTABLE ID
+CREATE sequence "MENSAJE_SEQ";
+
+CREATE trigger "BI_MENSAJE"  
+  before insert on "MENSAJE"              
+  for each row 
+begin  
+  if :NEW."ID" is null then
+    select "MENSAJE_SEQ".nextval into :NEW."ID" from dual;
   end if;
 end;

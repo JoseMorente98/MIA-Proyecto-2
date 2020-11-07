@@ -1,0 +1,172 @@
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 *ngIf="data" style="color:#1D351D;">{{data.nombre==null?'No Disponible':data.nombre}}</h3>
+    </div>
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0)" style="color:#1D351D;">Home</a>
+            </li>
+            <li class="breadcrumb-item">Productos</li>
+            <li class="breadcrumb-item active" *ngIf="data">{{data.nombre==null?'No Disponible':data.nombre}}</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row el-element-overlay">
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="row el-element-overlay"  style="margin-bottom: 0px !important;">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-8"  *ngIf="data">
+                    <div class="card" style="margin-bottom: 0px !important;">
+                        <div class="el-card-item"  style="margin-bottom: 0px !important;">
+                            <div class="el-card-avatar el-overlay-1"  style="margin-bottom: 0px !important;"> 
+                                <img src="{{data.picture}}" alt="user" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6" *ngIf="data">
+            <h1>{{data.nombre}}</h1>
+            <h3>Q {{ data.precio | number : '1.2-2'}}</h3>
+            <p>{{data.descripcion}}</p>
+            <button type="button" class="btn waves-effect waves-light btn-rounded btn-success" data-toggle="modal" data-target="#modalFormDataAdd">
+                <i class="fa fa-comment-o"></i> Comentar
+            </button>
+            <button type="button" class="btn waves-effect waves-light btn-rounded btn-success" data-toggle="modal" data-target="#modalFormDataAddDenuncia">
+                <i class="fa fa-ban"></i> Denunciar
+            </button><br><br>
+            <div class="row">
+                <div class="col-lg-3 col-md-6"></div>
+                <div class="col-lg-2 col-md-6 divcont" style="text-align: center;">
+                    <button type="button" class="btn btn-outline-success btn-rounded centerbut" (click)="restarCantidad()"><i class="fa fa-minus"></i></button>
+                </div>
+                <div class="col-lg-2 col-md-6" style="text-align: center;">
+                    <h2>{{cantidad}}</h2>
+                </div>
+                <div class="col-lg-2 col-md-6 divcont" style="text-align: center;">
+                    <button type="button" class="btn btn-outline-success btn-rounded centerbut" (click)="sumarCantidad()"><i class="fa fa-plus"></i></button>
+                </div>
+                <div class="col-lg-3 col-md-6"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6"></div>
+                <div class="col-lg-6 col-md-6 divcont" style="text-align: center;">
+                    <button type="button" class="btn btn-outline-success btn-rounded centerbut" (click)="agregarCarrito()"><i class="fa fa-cart-plus"></i> Agregar Carrito</button>
+                </div>
+                <div class="col-lg-3 col-md-6"></div>
+            </div><br>
+            <div class="row">
+                <div class="col-lg-3 col-md-6"></div>
+                <div class="col-lg-3 col-md-6 divcont" style="text-align: center;">
+                    <button type="button" class="btn btn-outline-primary btn-rounded centerbut active" (click)="restarCantidad()"><i class="fa fa-thumbs-o-up"></i> Me Gusta</button>
+                </div>
+                <div class="col-lg-3 col-md-6 divcont" style="text-align: center;">
+                    <button type="button" class="btn btn-outline-danger btn-rounded centerbut" (click)="sumarCantidad()"><i class="fa fa-thumbs-o-down"></i> No Me Gusta</button>
+                </div>
+                <div class="col-lg-3 col-md-6"></div>
+            </div>
+        </div>
+        <div class="container">
+            <h3 class="display-4" style="font-size: 30px;">Comentarios</h3>
+            <div class="profiletimeline">
+                <div class="sl-item" *ngFor="let item of comentarios">
+                    <div class="sl-left"> <img src="{{item.picture}}" alt="user" class="img-circle" /> </div>
+                    <div class="sl-right">
+                        <div><a href="#" class="link">{{item.nombre}} {{item.apellido}}</a> <span class="sl-date"> {{item.fecha | date: 'medium'}}</span>
+                            <p class="m-t-10">{{item.comentario}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <h3 class="display-4" style="font-size: 30px;">Denuncias</h3>
+            <div class="profiletimeline">
+                <div class="sl-item" *ngFor="let item of denuncias">
+                    <div class="sl-left"> <img src="{{item.picture}}" alt="user" class="img-circle" /> </div>
+                    <div class="sl-right">
+                        <div><a href="#" class="link">{{item.nombre}} {{item.apellido}}</a> <span class="sl-date"> {{item.fecha | date: 'medium'}}</span>
+                            <p class="m-t-10">{{item.denuncia}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- MODAL RESPONSIVE AGREGAR -->
+<!-- ============================================================== -->
+<div id="modalFormDataAdd" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <form class="modal-dialog" [formGroup]="formData" (ngSubmit)="create()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Agregar Comentario</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">Descripción:</label>
+                        <textarea class="form-control" id="message-text" formControlName="descripcion" name="descripcion"></textarea>
+                        <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+                            <div class="alert alert-danger" role="alert" *ngIf="descripcion.errors.required">
+                              La descripción es requerida
+                            </div>
+                            <div class="alert alert-warning" role="alert" *ngIf="descripcion.errors.maxlength">
+                              La longitud maxima es de 255 caracteres
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn waves-effect waves-light btn-rounded btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn waves-effect waves-light btn-rounded btn-success" [disabled]="!formData.valid">Guardar Cambios</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- ============================================================== -->
+<!-- MODAL RESPONSIVE AGREGAR -->
+<!-- ============================================================== -->
+<div id="modalFormDataAddDenuncia" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <form class="modal-dialog" [formGroup]="formData" (ngSubmit)="createDenuncia()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Denunciar Producto</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">Motivo:</label>
+                        <textarea class="form-control" id="message-text" formControlName="descripcion" name="descripcion"></textarea>
+                        <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+                            <div class="alert alert-danger" role="alert" *ngIf="descripcion.errors.required">
+                              La descripción es requerida
+                            </div>
+                            <div class="alert alert-warning" role="alert" *ngIf="descripcion.errors.maxlength">
+                              La longitud maxima es de 255 caracteres
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn waves-effect waves-light btn-rounded btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn waves-effect waves-light btn-rounded btn-success" [disabled]="!formData.valid">Guardar Cambios</button>
+            </div>
+        </div>
+    </form>
+</div>
+

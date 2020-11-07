@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+//SWAL
+declare var swal:any;
+
 @Component({
   selector: 'app-carrito',
   templateUrl: './carrito.component.html',
@@ -24,7 +27,35 @@ export class CarritoComponent implements OnInit {
       console.log(element.subtotal)
       this.total = this.total + (+element.subtotal)
     });
-    console.log(this.total)
+  }
+
+  deleteCar(e:any) {
+
+    swal({   
+      title: "Eliminar Producto",   
+      text: '¿Desea eliminar el producto del carrito?',   
+      type: "warning",   
+      showCancelButton: true,    
+      confirmButtonText: "Aceptar",   
+      cancelButtonText: "Cancelar",   
+      closeOnConfirm: false,   
+      closeOnCancel: false 
+    })
+    .then((isConfirm) => {
+      if (isConfirm) {
+        this.carrito.splice(this.carrito.indexOf(e),1)
+        localStorage.removeItem('currentCart');
+        localStorage.setItem('currentCart', JSON.stringify(this.carrito))
+        this.total = 0;
+        this.carrito.forEach(element => {
+          console.log(element.subtotal)
+          this.total = this.total + (+element.subtotal)
+        });
+        swal("Se ha eliminado el producto del carrito.", {
+          icon: "success",
+        });
+      } else {}
+    });
   }
 
 }

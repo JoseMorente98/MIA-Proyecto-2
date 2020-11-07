@@ -16,6 +16,9 @@ var usuario_router_1 = __importDefault(require("./router/usuario.router"));
 var categoria_router_1 = __importDefault(require("./router/categoria.router"));
 var producto_router_1 = __importDefault(require("./router/producto.router"));
 var denuncia_router_1 = __importDefault(require("./router/denuncia.router"));
+var comentario_router_1 = __importDefault(require("./router/comentario.router"));
+var like_router_1 = __importDefault(require("./router/like.router"));
+var bitacora_router_1 = __importDefault(require("./router/bitacora.router"));
 /**
  * HTTP CORS
  */
@@ -40,6 +43,9 @@ server.app.use(api, usuario_router_1.default);
 server.app.use(api, categoria_router_1.default);
 server.app.use(api, producto_router_1.default);
 server.app.use(api, denuncia_router_1.default);
+server.app.use(api, comentario_router_1.default);
+server.app.use(api, like_router_1.default);
+server.app.use(api, bitacora_router_1.default);
 /**
  * INICIA SERVIDOR
  */

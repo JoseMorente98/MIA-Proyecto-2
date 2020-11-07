@@ -13,6 +13,9 @@ import usuario from "./router/usuario.router";
 import categoria from "./router/categoria.router";
 import producto from "./router/producto.router";
 import denuncia from "./router/denuncia.router";
+import comentario from "./router/comentario.router";
+import like from "./router/like.router";
+import bitacora from "./router/bitacora.router";
 
 /**
  * HTTP CORS
@@ -39,6 +42,9 @@ server.app.use(api, usuario);
 server.app.use(api, categoria);
 server.app.use(api, producto);
 server.app.use(api, denuncia);
+server.app.use(api, comentario);
+server.app.use(api, like);
+server.app.use(api, bitacora);
 
 /**
  * INICIA SERVIDOR

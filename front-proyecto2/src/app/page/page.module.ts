@@ -12,6 +12,8 @@ import { CategoriasComponent } from './categorias/categorias.component';
 import { ChatsComponent } from './chats/chats.component';
 import { ProductosComponent } from './productos/productos.component';
 import { CarritoComponent } from './carrito/carrito.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { DetalleProductoComponent } from './detalle-producto/detalle-producto.component';
 
 
 
@@ -25,11 +27,13 @@ import { CarritoComponent } from './carrito/carrito.component';
     CategoriasComponent,
     ChatsComponent,
     ProductosComponent,
-    CarritoComponent
+    CarritoComponent,
+    DetalleProductoComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
+    Ng2SearchPipeModule,
     ReactiveFormsModule,
     RouterModule,
     SharedModule,

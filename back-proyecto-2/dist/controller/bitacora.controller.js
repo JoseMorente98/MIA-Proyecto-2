@@ -39,37 +39,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mail_1 = __importDefault(require("../mail/mail"));
 var oracle_1 = __importDefault(require("../oracle/oracle"));
-var nodemailer = require("nodemailer");
-var DenunciaController = /** @class */ (function () {
-    function DenunciaController() {
+var BitacoraController = /** @class */ (function () {
+    function BitacoraController() {
         var _this = this;
         this.getAll = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var query, result, data_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "\n            SELECT * FROM DENUNCIA\n            INNER JOIN PRODUCTO ON DENUNCIA.PRODUCTO = PRODUCTO.ID \n            INNER JOIN USUARIO ON DENUNCIA.USUARIO = USUARIO.ID \n        ";
+                        query = "\n            SELECT * FROM BITACORA\n        ";
                         return [4 /*yield*/, oracle_1.default.selectQuery(query)];
                     case 1:
                         result = _a.sent();
-                        console.log(result);
                         if (result) {
                             data_1 = [];
                             result.rows.map(function (element) {
                                 var dataSchema = {
                                     "id": element[0],
-                                    "denuncia": element[1],
-                                    "fecha": element[2],
-                                    "estado": element[3],
-                                    "producto": element[4],
-                                    "usuario": element[5],
-                                    "nombreProducto": element[7],
-                                    "estadoProducto": element[14],
-                                    "nombre": element[16],
-                                    "apellido": element[17],
-                                    "correo": element[18],
+                                    "nombre": element[1]
                                 };
                                 data_1.push(dataSchema);
                             });
@@ -92,28 +80,31 @@ var DenunciaController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         body = {
-                            id: req.params.id,
-                            id2: req.params.id2,
+                            id: req.params.id
                         };
-                        query = "\n            SELECT * FROM DENUNCIA\n            INNER JOIN USUARIO ON DENUNCIA.USUARIO = USUARIO.ID \n            WHERE DENUNCIA.USUARIO = " + body.id + " AND DENUNCIA.PRODUCTO = " + body.id2 + "\n        ";
+                        query = "\n            SELECT * FROM BITACORA WHERE id = " + body.id + "\n        ";
                         return [4 /*yield*/, oracle_1.default.selectQuery(query)];
                     case 1:
                         result = _a.sent();
-                        console.log(result);
                         if (result) {
                             data_2 = [];
                             result.rows.map(function (element) {
                                 var dataSchema = {
                                     "id": element[0],
-                                    "denuncia": element[1],
-                                    "fecha": element[2],
-                                    "nombre": element[7],
-                                    "apellido": element[8],
-                                    "picture": element[11],
+                                    "nombre": element[1]
                                 };
                                 data_2.push(dataSchema);
                             });
-                            return [2 /*return*/, res.json(data_2)];
+                            if (data_2.length > 0) {
+                                return [2 /*return*/, res.json(data_2[0])];
+                            }
+                            else {
+                                return [2 /*return*/, res.status(400).json({
+                                        ok: false,
+                                        status: 400,
+                                        error: "No existen datos."
+                                    })];
+                            }
                         }
                         else {
                             return [2 /*return*/, res.status(400).json({
@@ -136,7 +127,7 @@ var DenunciaController = /** @class */ (function () {
                             producto: req.body.producto,
                             usuario: req.body.usuario,
                         };
-                        query = "\n            INSERT INTO DENUNCIA(descripcion, estado, producto, usuario) \n            VALUES ('" + body.descripcion + "', 1, " + body.producto + ",\n            " + body.usuario + ")\n        ";
+                        query = "\n            INSERT INTO BITACORA(descripcion, usuario) \n            VALUES ('" + body.descripcion + "',\n            " + body.usuario + ")\n        ";
                         return [4 /*yield*/, oracle_1.default.executeQuery(query)];
                     case 1:
                         result = _a.sent();
@@ -165,10 +156,9 @@ var DenunciaController = /** @class */ (function () {
                     case 0:
                         body = {
                             descripcion: req.body.descripcion,
-                            estado: req.body.estado,
                             id: req.params.id
                         };
-                        query = "\n            UPDATE DENUNCIA SET \n            descripcion = '" + body.descripcion + "',\n            estado = '" + body.estado + "'\n            WHERE id = " + body.id + "\n        ";
+                        query = "\n            UPDATE BITACORA SET \n            descripcion = '" + body.descripcion + "'\n            WHERE id = " + body.id + "\n        ";
                         return [4 /*yield*/, oracle_1.default.executeQuery(query)];
                     case 1:
                         result = _a.sent();
@@ -198,7 +188,7 @@ var DenunciaController = /** @class */ (function () {
                         body = {
                             id: req.params.id
                         };
-                        query = "\n            DELETE FROM DENUNCIA WHERE id = " + body.id + "\n        ";
+                        query = "\n            DELETE FROM BITACORA WHERE id = " + body.id + "\n        ";
                         return [4 /*yield*/, oracle_1.default.executeQuery(query)];
                     case 1:
                         result = _a.sent();
@@ -220,81 +210,10 @@ var DenunciaController = /** @class */ (function () {
                 }
             });
         }); };
-        this.bloquear = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var body, query, result, query2, result2, transporter;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        body = {
-                            producto: req.body.producto,
-                            nombre: req.body.nombre,
-                            apellido: req.body.apellido,
-                            correo: req.body.correo,
-                            productoNombre: req.body.productoNombre,
-                            id: req.params.id
-                        };
-                        console.log(body);
-                        query = "\n            UPDATE DENUNCIA SET \n            estado = 0\n            WHERE id = " + body.id + "\n        ";
-                        return [4 /*yield*/, oracle_1.default.executeQuery(query)];
-                    case 1:
-                        result = _a.sent();
-                        if (!result) return [3 /*break*/, 3];
-                        query2 = "\n                UPDATE PRODUCTO SET \n                estado = 0\n                WHERE id = " + body.producto + "\n            ";
-                        return [4 /*yield*/, oracle_1.default.executeQuery(query2)];
-                    case 2:
-                        result2 = _a.sent();
-                        if (result2) {
-                            transporter = nodemailer.createTransport({
-                                service: 'Gmail',
-                                auth: {
-                                    user: 'josemorenteg98@gmail.com',
-                                    pass: 'rvliefzecigjpgjw'
-                                }
-                            });
-                            transporter.sendMail({
-                                from: '"Marketplace" <email@gmail.com>',
-                                to: body.correo,
-                                subject: 'Denuncia Comunitaria',
-                                text: 'Marketplace',
-                                html: mail_1.default.getInstance().denunciarHTLM(body.nombre + ' ' + body.apellido, body.productoNombre)
-                            }, function (error, info) {
-                                if (error) {
-                                    res.json({
-                                        ok: false,
-                                        status: 400,
-                                        err: error
-                                    });
-                                }
-                                else {
-                                    return res.json({
-                                        ok: true,
-                                        status: 200,
-                                        data: "Datos actualizados correctamente :D"
-                                    });
-                                }
-                            });
-                        }
-                        else {
-                            return [2 /*return*/, res.status(400).json({
-                                    ok: false,
-                                    status: 400,
-                                    error: "Ha ocurrido un error."
-                                })];
-                        }
-                        return [3 /*break*/, 4];
-                    case 3: return [2 /*return*/, res.status(400).json({
-                            ok: false,
-                            status: 400,
-                            error: "Ha ocurrido un error."
-                        })];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
     }
-    DenunciaController.getInstance = function () {
+    BitacoraController.getInstance = function () {
         return this._instance || (this._instance = new this());
     };
-    return DenunciaController;
+    return BitacoraController;
 }());
-exports.default = DenunciaController;
+exports.default = BitacoraController;

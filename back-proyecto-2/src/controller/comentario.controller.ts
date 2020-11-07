@@ -1,8 +1,8 @@
 import { query, Response } from 'express';
 import OracleConnection from '../oracle/oracle';
 
-export default class ProductoController {
-    private static _instance: ProductoController;
+export default class ComentarioController {
+    private static _instance: ComentarioController;
 
     constructor(
     ) {
@@ -14,7 +14,7 @@ export default class ProductoController {
 
     getAll = async (req: any, res: Response) => {
         const query = `
-            SELECT * FROM PRODUCTO
+            SELECT * FROM COMENTARIO
         `;
         
         let result:any = await OracleConnection.selectQuery(query);
@@ -23,13 +23,10 @@ export default class ProductoController {
             result.rows.map((element: any[]) => {
                 let dataSchema = {
                     "id": element[0],
-                    "nombre": element[1],
-                    "descripcion": element[2],
-                    "clave": element[3],
-                    "picture": element[4],
-                    "precio": element[5],
-                    "categoria": element[6],
-                    "usuario": element[7],
+                    "descripcion": element[1],
+                    "fecha": element[2],
+                    "producto": element[3],
+                    "usuario": element[4],
                 }
                 data.push(dataSchema);
             });
@@ -46,39 +43,33 @@ export default class ProductoController {
     
     getSingle = async (req: any, res: Response) => {
         let body = {
-            id : req.params.id
+            id : req.params.id,
+            id2 : req.params.id2,
         }
 
         const query = `
-            SELECT * FROM PRODUCTO WHERE id = ${body.id}
+            SELECT * FROM COMENTARIO
+            INNER JOIN USUARIO ON COMENTARIO.USUARIO = USUARIO.ID 
+            WHERE COMENTARIO.USUARIO = ${body.id} AND COMENTARIO.PRODUCTO = ${body.id2}
         `;
-        
         let result:any = await OracleConnection.selectQuery(query);
+        console.log(result)
+
         if(result) {
             let data:any[] = [];
             result.rows.map((element: any[]) => {
                 let dataSchema = {
                     "id": element[0],
-                    "nombre": element[1],
-                    "descripcion": element[2],
-                    "clave": element[3],
-                    "picture": element[4],
-                    "precio": element[5],
-                    "categoria": element[6],
-                    "usuario": element[7],
+                    "comentario": element[1],
+                    "fecha": element[2],
+                    "nombre": element[6],
+                    "apellido": element[7],
+                    "picture": element[10],
                 }
                 data.push(dataSchema);
             });
             
-            if(data.length > 0) {
-                return res.json(data[0])
-            } else {
-                return res.status(400).json({
-                    ok: false,
-                    status: 400,
-                    error: "No existen datos."
-                });
-            }  
+            return res.json(data)
         } else {
             return res.status(400).json({
                 ok: false,
@@ -90,19 +81,15 @@ export default class ProductoController {
 
     create = async (req: any, res: Response) => {
         let body = {
-            nombre: req.body.nombre,
             descripcion: req.body.descripcion,
-            clave: req.body.clave,
-            picture: req.body.picture,
-            precio: req.body.precio,
-            categoria: req.body.categoria,
+            producto: req.body.producto,
             usuario: req.body.usuario,
         }
 
         const query = `
-            INSERT INTO PRODUCTO(nombre, descripcion, clave, picture, precio, categoria, usuario) 
-            VALUES ('${body.nombre}', '${body.descripcion}', '${body.clave}',
-            '${body.picture}', ${body.precio}, ${body.categoria}, ${body.usuario})
+            INSERT INTO COMENTARIO(descripcion, producto, usuario) 
+            VALUES ('${body.descripcion}', ${body.producto},
+            ${body.usuario})
         `;
         
         let result:any = await OracleConnection.executeQuery(query);
@@ -123,25 +110,13 @@ export default class ProductoController {
 
     update = async (req: any, res: Response) => {
         let body = {
-            nombre: req.body.nombre,
             descripcion: req.body.descripcion,
-            clave: req.body.clave,
-            picture: req.body.picture,
-            precio: req.body.precio,
-            categoria: req.body.categoria,
-            usuario: req.body.usuario,
             id : req.params.id
         }
 
         const query = `
-            UPDATE PRODUCTO SET 
-            nombre = '${body.nombre}',
-            descripcion = '${body.descripcion}',
-            clave = '${body.clave}',
-            picture = '${body.picture}',
-            precio = '${body.precio}',
-            categoria = '${body.categoria}',
-            usuario = '${body.usuario}'
+            UPDATE COMENTARIO SET 
+            descripcion = '${body.descripcion}'
             WHERE id = ${body.id}
         `;
         
@@ -167,7 +142,7 @@ export default class ProductoController {
         }
 
         const query = `
-            DELETE FROM PRODUCTO WHERE id = ${body.id}
+            DELETE FROM COMENTARIO WHERE id = ${body.id}
         `;
         
         let result:any = await OracleConnection.executeQuery(query);

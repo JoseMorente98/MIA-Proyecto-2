@@ -15,6 +15,7 @@ import { PageModule } from './page/page.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RecoveryComponent } from './recovery/recovery.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { RecoveryComponent } from './recovery/recovery.component';
   ],
   imports: [
     CommonModule,
+    Ng2SearchPipeModule,
     BrowserModule,
     BrowserAnimationsModule, 
     AppRoutingModule,
