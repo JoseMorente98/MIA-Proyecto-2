@@ -137,77 +137,76 @@ var OrdenController = /** @class */ (function () {
                         return [4 /*yield*/, oracle_1.default.executeQuery(query)];
                     case 1:
                         result = _a.sent();
-                        if (!result) return [3 /*break*/, 3];
+                        if (!result) return [3 /*break*/, 8];
                         query2 = "\n                SELECT *\n                FROM (SELECT * FROM VENTA\n                ORDER BY ID DESC)\n                WHERE ROWNUM = 1\n            ";
                         return [4 /*yield*/, oracle_1.default.selectQuery(query2)];
                     case 2:
                         result2 = _a.sent();
-                        if (result2) {
-                            data_3 = [];
-                            result2.rows.map(function (element) {
-                                var dataSchema = {
-                                    "id": element[0],
-                                    "usuario": element[1],
-                                    "total": element[2],
-                                };
-                                data_3.push(dataSchema);
+                        if (!result2) return [3 /*break*/, 6];
+                        data_3 = [];
+                        result2.rows.map(function (element) {
+                            var dataSchema = {
+                                "id": element[0],
+                                "usuario": element[1],
+                                "total": element[2],
+                            };
+                            data_3.push(dataSchema);
+                        });
+                        if (!(data_3.length > 0)) return [3 /*break*/, 4];
+                        body.detalle.forEach(function (element) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, this.agregarDetalle(element.id, data_3[0].id, element.cantidad, element.subtotal, element.usuario, element.nombre)];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
                             });
-                            if (data_3.length > 0) {
-                                body.detalle.forEach(function (element) { return __awaiter(_this, void 0, void 0, function () {
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0: return [4 /*yield*/, this.agregarDetalle(element.id, data_3[0].id, element.cantidad, element.subtotal, element.usuario, element.nombre)];
-                                            case 1:
-                                                _a.sent();
-                                                return [2 /*return*/];
-                                        }
-                                    });
-                                }); });
-                                transporter = nodemailer.createTransport({
-                                    service: 'Gmail',
-                                    auth: {
-                                        user: 'josemorenteg98@gmail.com',
-                                        pass: 'rvliefzecigjpgjw'
-                                    }
-                                });
-                                transporter.sendMail({
-                                    from: '"Marketplace" <email@gmail.com>',
-                                    to: body.correo,
-                                    subject: 'Factura No.' + data_3[0].id,
-                                    text: 'Marketplace',
-                                    html: mail_1.default.getInstance()
-                                        .productoCompra(body.detalle, body.nombreCompleto, body.total)
-                                }, function (error, info) {
-                                    if (error) {
-                                        return res.json(data_3[0]);
-                                    }
-                                    else {
-                                        return res.json(data_3[0]);
-                                    }
-                                });
+                        }); });
+                        return [4 /*yield*/, this.restarCredito(body.usuario, body.total)];
+                    case 3:
+                        _a.sent();
+                        transporter = nodemailer.createTransport({
+                            service: 'Gmail',
+                            auth: {
+                                user: 'josemorenteg98@gmail.com',
+                                pass: 'rvliefzecigjpgjw'
+                            }
+                        });
+                        transporter.sendMail({
+                            from: '"Marketplace" <email@gmail.com>',
+                            to: body.correo,
+                            subject: 'Factura No.' + data_3[0].id,
+                            text: 'Marketplace',
+                            html: mail_1.default.getInstance()
+                                .productoCompra(body.detalle, body.nombreCompleto, body.total)
+                        }, function (error, info) {
+                            if (error) {
+                                return res.json(data_3[0]);
                             }
                             else {
-                                return [2 /*return*/, res.status(400).json({
-                                        ok: false,
-                                        status: 400,
-                                        error: "No existen datos."
-                                    })];
+                                return res.json(data_3[0]);
                             }
-                        }
-                        else {
-                            return [2 /*return*/, res.status(400).json({
-                                    ok: false,
-                                    status: 400,
-                                    error: "No existen datos."
-                                })];
-                        }
-                        return [3 /*break*/, 4];
-                    case 3: return [2 /*return*/, res.status(400).json({
+                        });
+                        return [3 /*break*/, 5];
+                    case 4: return [2 /*return*/, res.status(400).json({
+                            ok: false,
+                            status: 400,
+                            error: "No existen datos."
+                        })];
+                    case 5: return [3 /*break*/, 7];
+                    case 6: return [2 /*return*/, res.status(400).json({
+                            ok: false,
+                            status: 400,
+                            error: "No existen datos."
+                        })];
+                    case 7: return [3 /*break*/, 9];
+                    case 8: return [2 /*return*/, res.status(400).json({
                             ok: false,
                             status: 400,
                             error: "Ha ocurrido un error."
                         })];
-                    case 4: return [2 /*return*/];
+                    case 9: return [2 /*return*/];
                 }
             });
         }); };
@@ -266,6 +265,52 @@ var OrdenController = /** @class */ (function () {
                                     console.log("Correo enviado");
                                 }
                             });
+                        }
+                        else {
+                            console.log("No se ha actualizado");
+                        }
+                        return [3 /*break*/, 4];
+                    case 3:
+                        console.log("Usuario No Encontrado");
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.restarCredito = function (usuario, total) { return __awaiter(_this, void 0, void 0, function () {
+            var query, result2, data_5, nuevoCredito, query2, result3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "\n            SELECT * FROM USUARIO WHERE id = " + usuario + "\n        ";
+                        return [4 /*yield*/, oracle_1.default.selectQuery(query)];
+                    case 1:
+                        result2 = _a.sent();
+                        if (!result2) return [3 /*break*/, 3];
+                        data_5 = [];
+                        result2.rows.map(function (element) {
+                            var categorySchema = {
+                                "id": element[0],
+                                "nombre": element[1],
+                                "apellido": element[2],
+                                "email": element[3],
+                                "password": element[4],
+                                "picture": element[5],
+                                "rol": element[6],
+                                "fecha": element[7],
+                                "credito": element[8],
+                                "activo": element[9],
+                                "pais": element[10],
+                            };
+                            data_5.push(categorySchema);
+                        });
+                        nuevoCredito = data_5[0].credito - total;
+                        query2 = "\n                UPDATE USUARIO SET \n                credito = " + nuevoCredito + "\n                WHERE id = " + usuario + "\n            ";
+                        return [4 /*yield*/, oracle_1.default.executeQuery(query2)];
+                    case 2:
+                        result3 = _a.sent();
+                        if (result3) {
+                            console.log("Credito actualizado");
                         }
                         else {
                             console.log("No se ha actualizado");

@@ -122,6 +122,7 @@ export default class OrdenController {
                             element.nombre)
                     });
 
+                    await this.restarCredito(body.usuario, body.total);
 
                     /**
                      * ENVIAR DETALLE DE COMPRA
@@ -248,6 +249,55 @@ export default class OrdenController {
                         console.log("Correo enviado")
                     }
                 });
+            } else {
+                console.log("No se ha actualizado")
+            }
+        } else {
+            console.log("Usuario No Encontrado")
+        }
+    }
+
+    restarCredito = async (usuario:number, total:number) => {
+        const query = `
+            SELECT * FROM USUARIO WHERE id = ${usuario}
+        `;
+        
+        let result2:any = await OracleConnection.selectQuery(query);
+        if(result2) {
+            let data:any[] = [];
+            result2.rows.map((element: any[]) => {
+                let categorySchema = {
+                    "id": element[0],
+                    "nombre": element[1],
+                    "apellido": element[2],
+                    "email": element[3],
+                    "password": element[4],
+                    "picture": element[5],
+                    "rol": element[6],
+                    "fecha": element[7],
+                    "credito": element[8],
+                    "activo": element[9],
+                    "pais": element[10],
+                }
+                data.push(categorySchema);
+            });
+            
+            
+            /**
+             * ACTUALIZAR CREDITOS USUARIO
+             */
+            let nuevoCredito = data[0].credito - total;
+
+            const query2 = `
+                UPDATE USUARIO SET 
+                credito = ${nuevoCredito}
+                WHERE id = ${usuario}
+            `;
+            
+            let result3:any = await OracleConnection.executeQuery(query2);
+            if(result3) { 
+                console.log("Credito actualizado")
+    
             } else {
                 console.log("No se ha actualizado")
             }
