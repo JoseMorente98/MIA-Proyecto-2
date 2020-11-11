@@ -212,3 +212,48 @@ begin
     select "MENSAJE_SEQ".nextval into :NEW."ID" from dual;
   end if;
 end;
+
+-- TABLA VENTA
+CREATE table "VENTA" (
+    "ID"          NUMBER(9) NOT NULL,
+    "USUARIO"     NUMBER(9),
+    "TOTAL"     NUMBER(9,2),
+    constraint  "VENTA_PK" primary key ("ID"),
+    CONSTRAINT  "VENTA_USUARIO_FK" FOREIGN KEY ("USUARIO") REFERENCES "USUARIO" ("ID")
+);
+
+-- SECUENCIA INCREMENTABLE ID
+CREATE sequence "VENTA_SEQ";
+
+CREATE trigger "BI_VENTA"  
+  before insert on "VENTA"              
+  for each row 
+begin  
+  if :NEW."ID" is null then
+    select "VENTA_SEQ".nextval into :NEW."ID" from dual;
+  end if;
+end;
+
+-- TABLA DETALLEVENTA
+CREATE table "DETALLEVENTA" (
+    "ID"          NUMBER(9) NOT NULL,
+    "VENTA"     NUMBER(9),
+    "PRODUCTO"     NUMBER(9),
+    "CANTIDAD"     NUMBER(9),
+    "SUBTOTAL"     NUMBER(9,2),
+    constraint  "DETALLEVENTA_PK" primary key ("ID"),
+    CONSTRAINT  "DETALLEVENTA_VENTA_FK" FOREIGN KEY ("VENTA") REFERENCES "VENTA" ("ID"),
+    CONSTRAINT  "DETALLEVENTA_PRODUCTO_FK" FOREIGN KEY ("PRODUCTO") REFERENCES "PRODUCTO" ("ID")
+);
+
+-- SECUENCIA INCREMENTABLE ID
+CREATE sequence "DETALLEVENTA_SEQ";
+
+CREATE trigger "BI_DETALLEVENTA"  
+  before insert on "DETALLEVENTA"              
+  for each row 
+begin  
+  if :NEW."ID" is null then
+    select "DETALLEVENTA_SEQ".nextval into :NEW."ID" from dual;
+  end if;
+end;
