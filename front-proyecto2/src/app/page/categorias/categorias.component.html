@@ -45,27 +45,6 @@
             </div>
         </div>
     </div>
-
-    <div class="col-lg-3 col-md-6" *ngFor="let item of data">
-        <div class="card">
-            <div class="el-card-item">
-                <div class="el-card-avatar el-overlay-1" (click)="goToRoute('productos/' + item.id)"> 
-                    <img src="{{item.picture==''?'https://res.cloudinary.com/devgea-s-a/image/upload/v1594950613/Finca%20Cienaguilla/mkdr6jfwkclzdzubuuwb.png':item.picture}}" 
-                    alt="user"  />
-                    <div class="el-overlay">
-                        <ul class="el-info">
-                            <!--<li><a class="btn default btn-outline" href="javascript:void(0);" data-toggle="modal" data-target="#modalFormDataUpdate" (click)="getData(item)"><i class="icon-pencil"></i></a></li>
-                            <li><a class="btn default btn-outline" href="javascript:void(0);" data-toggle="modal" data-target="#modalFormDataDelete" (click)="getData(item)"><i class="icon-trash"></i></a></li>
-                            <li><a class="btn default btn-outline" href="javascript:void(0);" (click)="goToRoute(item.id)"><i class="icon-list"></i></a></li>-->
-                        </ul>
-                    </div>
-                </div>
-                <div class="el-card-content">
-                    <h3 class="box-title">{{item.nombre==null?'No Disponible':item.nombre}}</h3> <small>{{item.descripcion==null?'No Disponible':item.descripcion}}</small>
-                    <br/> </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- ============================================================== -->

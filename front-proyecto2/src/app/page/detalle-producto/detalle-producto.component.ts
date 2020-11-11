@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductoService } from 'src/app/service/producto.service';
 import { ComentarioService } from 'src/app/service/comentario.service';
 import { DenunciaService } from 'src/app/service/denuncia.service';
+import { LikeService } from 'src/app/service/like.service';
 
 //SWAL
 declare var swal:any;
@@ -17,6 +18,7 @@ declare var $:any;
 export class DetalleProductoComponent implements OnInit {
   public parameter:any;
   public data:any;
+  public likeData:any;
   public cantidad:number = 1;
   public formData:FormGroup;
   public comentarios:any[] = [];
@@ -27,6 +29,7 @@ export class DetalleProductoComponent implements OnInit {
     private productoService: ProductoService,
     private comentarioService: ComentarioService,
     private denunciaService: DenunciaService,
+    private likeService: LikeService
   ) { }
 
   ngOnInit(): void {
@@ -35,6 +38,7 @@ export class DetalleProductoComponent implements OnInit {
     this.initializeForm()
     this.getAllComentarios();
     this.getAllDenuncia()
+    this.getLike()
   }
 
   getSingle() {
@@ -43,6 +47,16 @@ export class DetalleProductoComponent implements OnInit {
       console.log(res)
       this.data = res;
       console.log(this.data)
+    }, (error) => {
+      console.log("Ha ocurrido un error.")
+    });
+  }
+
+  getLike() {
+    this.likeService.getSingle(+localStorage.getItem('currentId'), +this.parameter)
+    .subscribe((res) => {
+      console.log(res)
+      this.likeData = res;
     }, (error) => {
       console.log("Ha ocurrido un error.")
     });
@@ -128,6 +142,30 @@ export class DetalleProductoComponent implements OnInit {
       });
       this.getAllDenuncia();
       this.initializeForm();
+    }, (error) => {
+      swal({
+        title: "Error",
+        text: "Ha ocurrido un error. Intente mas tarde nuevamente.",
+        icon: "error",
+      });
+    });
+  }
+
+  createLikeDislike(estado:any) {
+    let data = {
+      estado: estado,
+      producto: this.parameter,
+      usuario: +localStorage.getItem('currentId'),
+    }
+    this.likeService.create(data)
+    .subscribe((res) => {
+      console.log(res)
+      swal({
+        title: "Like Agregado",
+        text: "Te gusta el producto :D",
+        icon: "success",
+      });
+      this.getLike();
     }, (error) => {
       swal({
         title: "Error",

@@ -3,7 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CategoriaService } from 'src/app/service/categoria.service';
 import { ProductoService } from 'src/app/service/producto.service';
+import { LikeService } from 'src/app/service/like.service';
 import { UploadFileService } from 'src/app/service/upload-file.service';
+import { BitacoraService } from 'src/app/service/bitacora.service';
 
 //SWAL
 declare var swal:any;
@@ -24,6 +26,7 @@ export class ProductosComponent implements OnInit {
   public search: string;
   public strImage: any = "";
   selectData:any;
+  usuarioID:number = +localStorage.getItem('currentId');
   public element:any = {
     id: 0,
     id_productos: 0,
@@ -51,6 +54,7 @@ export class ProductosComponent implements OnInit {
     private categoriaService: CategoriaService,
     private productoService: ProductoService,
     private uploadFileService: UploadFileService,
+    private bitacoraService: BitacoraService,
     private router: Router
 
   ) { }
@@ -80,6 +84,26 @@ export class ProductosComponent implements OnInit {
     this.router.navigate([id]);
   }
 
+  onChange(deviceValue) {
+    console.log(deviceValue);
+    if(deviceValue == 0) {
+      this.getAllProductos();
+    } else {
+      this.getAllProductosByCategoria(+deviceValue)
+    }
+  }
+
+  onChangeASC(deviceValue) {
+    console.log(deviceValue);
+    if(deviceValue == 0) {
+      this.getAllProductos();
+    } else if (deviceValue == 'ASC') {
+      this.getAllProductosASC();
+    } else if (deviceValue == 'DESC') {
+      this.getAllProductosDESC();
+    }
+  }
+
   getAll() {
     this.categoriaService.getAll()
     .subscribe((res) => {
@@ -92,6 +116,37 @@ export class ProductosComponent implements OnInit {
 
   getAllProductos() {
     this.productoService.getAll()
+    .subscribe((res) => {
+      console.log(res)
+      this.data = [];
+      this.data = res;
+    }, (error) => {
+      console.log("Ha ocurrido un error, por favor intente nuevamente.")
+    });
+  }
+
+  getAllProductosByCategoria(id:any) {
+    this.productoService.getAllCategorias(id)
+    .subscribe((res) => {
+      this.data = [];
+      this.data = res;
+    }, (error) => {
+      console.log("Ha ocurrido un error, por favor intente nuevamente.")
+    });
+  }
+
+  getAllProductosASC() {
+    this.productoService.getAllASC()
+    .subscribe((res) => {
+      this.data = [];
+      this.data = res;
+    }, (error) => {
+      console.log("Ha ocurrido un error, por favor intente nuevamente.")
+    });
+  }
+
+  getAllProductosDESC() {
+    this.productoService.getAllDESC()
     .subscribe((res) => {
       this.data = [];
       this.data = res;
@@ -186,6 +241,7 @@ export class ProductosComponent implements OnInit {
         text: "El producto ha sido registrado exitosamente.",
         icon: "success",
       });
+      this.createBitacora();
       this.getAllProductos();
       this.initializeForm();
     }, (error) => {
@@ -245,4 +301,17 @@ export class ProductosComponent implements OnInit {
   get usuario() { return this.formData.get('usuario'); }
   get categoria() { return this.formData.get('categoria'); }
   get id() { return this.formData.get('id'); }
+
+  createBitacora() {
+    let data = {
+      descripcion: 'Se ha registrado un nuevo producto',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
+    });
+  }
 }

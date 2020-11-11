@@ -1,0 +1,322 @@
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 style="color:#1D351D;">Reportes</h3>
+    </div>
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0)" style="color:#1D351D;">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Reportes</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+<div class="row">
+    <!-- column -->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Reporte Bitacora</h4>
+                <form class="form-group">
+                    <div class="col-lg-12 col-xlg-6">
+                        <select class="form-control" name="selectPrecio" (change)="onChangeASC($event.target.value)">
+                            <option selected value="0">Ordenar</option>
+                            <option value="ASC">Ascendente</option>
+                            <option value="DESC">Descendente</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark" style="background-color: #1D351D; color: white;">
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Correo</th>
+                                <th scope="col" class="text-center">Descripción</th>
+                                <th scope="col" class="text-center">Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of bitacoras; let i = index" [attr.data-index]="i">
+                                <th class="text-center" scope="row">{{item.id}}</th>
+                                <td> {{item.email}}</td>
+                                <td> {{item.descripcion}}</td>
+                                <td> {{item.fecha | date: 'medium'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- column -->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Top 10 productos mas vendidos</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark" style="background-color: #1D351D; color: white;">
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Producto</th>
+                                <th scope="col" class="text-center">Nombre</th>
+                                <th scope="col" class="text-center">Apellido</th>
+                                <th scope="col" class="text-center">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of productos; let i = index" [attr.data-index]="i">
+                                <th class="text-center" scope="row">{{i+1}}</th>
+                                <td class="text-center">{{item.nombreProducto}}</td>
+                                <td class="text-center">{{item.nombre}}</td>
+                                <td class="text-center">{{item.apellido}}</td>
+                                <td class="text-center">{{item.cantidad}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- column -->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Top 10 productos MAS ME GUSTA</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark" style="background-color: #1D351D; color: white;">
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Producto</th>
+                                <th scope="col" class="text-center">Nombre</th>
+                                <th scope="col" class="text-center">Apellido</th>
+                                <th scope="col" class="text-center">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of megusta; let i = index" [attr.data-index]="i">
+                                <th class="text-center" scope="row">{{i+1}}</th>
+                                <td class="text-center">{{item.nombreProducto}}</td>
+                                <td class="text-center">{{item.nombre}}</td>
+                                <td class="text-center">{{item.apellido}}</td>
+                                <td class="text-center">{{item.cantidad}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- column -->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Top 10 productos MAS NO ME GUSTA</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark" style="background-color: #1D351D; color: white;">
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Producto</th>
+                                <th scope="col" class="text-center">Nombre</th>
+                                <th scope="col" class="text-center">Apellido</th>
+                                <th scope="col" class="text-center">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of nomegusta; let i = index" [attr.data-index]="i">
+                                <th class="text-center" scope="row">{{i+1}}</th>
+                                <td class="text-center">{{item.nombreProducto}}</td>
+                                <td class="text-center">{{item.nombre}}</td>
+                                <td class="text-center">{{item.apellido}}</td>
+                                <td class="text-center">{{item.cantidad}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- column -->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Top 10 cliente MAS CREDITO</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark" style="background-color: #1D351D; color: white;">
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Nombre</th>
+                                <th scope="col" class="text-center">Apellido</th>
+                                <th scope="col" class="text-center">Correo</th>
+                                <th scope="col" class="text-center">Fecha de Nacimiento</th>
+                                <th scope="col" class="text-center">Credito</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of topMasCredito; let i = index" [attr.data-index]="i">
+                                <th class="text-center" scope="row">{{item.id}}</th>
+                                <td class="text-center">{{item.nombre}}</td>
+                                <td class="text-center">{{item.apellido}}</td>
+                                <td class="text-center">{{item.email}}</td>
+                                <td class="text-center">{{item.fecha | date: 'mediumDate'}}</td>
+                                <td class="text-center">Q {{item.credito| number : '1.2-2'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- column -->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Top 10 cliente MENOS CREDITO</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark" style="background-color: #1D351D; color: white;">
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Nombre</th>
+                                <th scope="col" class="text-center">Apellido</th>
+                                <th scope="col" class="text-center">Correo</th>
+                                <th scope="col" class="text-center">Fecha de Nacimiento</th>
+                                <th scope="col" class="text-center">Credito</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of topMenosCredito; let i = index" [attr.data-index]="i">
+                                <th class="text-center" scope="row">{{item.id}}</th>
+                                <td class="text-center">{{item.nombre}}</td>
+                                <td class="text-center">{{item.apellido}}</td>
+                                <td class="text-center">{{item.email}}</td>
+                                <td class="text-center">{{item.fecha | date: 'mediumDate'}}</td>
+                                <td class="text-center">Q {{item.credito| number : '1.2-2'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- column -->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Top 10 cliente MAS DENUNCIAS</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark" style="background-color: #1D351D; color: white;">
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Nombre</th>
+                                <th scope="col" class="text-center">Apellido</th>
+                                <th scope="col" class="text-center">Correo</th>
+                                <th scope="col" class="text-center">Fecha de Nacimiento</th>
+                                <th scope="col" class="text-center">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of topDenuncias; let i = index" [attr.data-index]="i">
+                                <th class="text-center" scope="row">{{i+1}}</th>
+                                <td class="text-center">{{item.nombre}}</td>
+                                <td class="text-center">{{item.apellido}}</td>
+                                <td class="text-center">{{item.email}}</td>
+                                <td class="text-center">{{item.fecha | date: 'mediumDate'}}</td>
+                                <td class="text-center">{{item.cantidad}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+     <!-- column -->
+     <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Top 10 cliente MAS PUBLICACIONES</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark" style="background-color: #1D351D; color: white;">
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Nombre</th>
+                                <th scope="col" class="text-center">Apellido</th>
+                                <th scope="col" class="text-center">Correo</th>
+                                <th scope="col" class="text-center">Credito</th>
+                                <th scope="col" class="text-center">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of topPublicaciones; let i = index" [attr.data-index]="i">
+                                <th class="text-center" scope="row">{{i+1}}</th>
+                                <td class="text-center">{{item.nombre}}</td>
+                                <td class="text-center">{{item.apellido}}</td>
+                                <td class="text-center">{{item.email}}</td>
+                                <td class="text-center">{{item.credito}}</td>
+                                <td class="text-center">{{item.cantidad}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- column -->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Top 10 paises con mas credito y productos a la venta</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark" style="background-color: #1D351D; color: white;">
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Pais</th>
+                                <th scope="col" class="text-center">Credito</th>
+                                <th scope="col" class="text-center">Cantidad Usuarios</th>
+                                <th scope="col" class="text-center">Cantidad Productos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of paises; let i = index" [attr.data-index]="i">
+                                <th class="text-center" scope="row">{{i+1}}</th>
+                                <td class="text-center">{{item.nombre}}</td>
+                                <td class="text-center">Q {{item.credito| number : '1.2-2'}}</td>
+                                <td class="text-center">{{item.cantidad}}</td>
+                                <td class="text-center">{{item.cantidadProducto}}</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- End PAge Content -->
+<!-- ============================================================== -->

@@ -39,6 +39,30 @@ export class ProductoService {
     )
   }
 
+  public getAllASC() : Observable<any> {
+    let url = `${this.basePath}ascendente`;
+    return this.http.get(url, this.httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  public getAllDESC() : Observable<any> {
+    let url = `${this.basePath}descendente`;
+    return this.http.get(url, this.httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  public getAllCategorias(id:any) : Observable<any> {
+    let url = `${this.basePath}producto/categoria/${id}`;
+    return this.http.get(url, this.httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
   public getSingle(id:any) : Observable<any> {
     let url = `${this.basePath}producto/${id}`;
     return this.http.get(url, this.httpOptions)

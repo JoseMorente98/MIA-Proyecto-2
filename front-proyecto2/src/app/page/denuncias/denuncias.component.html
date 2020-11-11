@@ -18,6 +18,7 @@
             <div class="card-body">
                 <h4 class="card-title">Denuncia {{item.id}}</h4>
                 <h5 class="card-title">{{item.fecha | date: 'medium'}}</h5>
+                <h6 class="card-title">Producto: {{item.nombreProducto}}</h6>
                 <p class="card-text">{{item.denuncia}}</p>
                 <button [disabled]="item.estado == 0 || item.estadoProducto == 0" class="btn btn-rounded btn-danger" (click)="bloquear(item.id, item.producto, item.nombreProducto, item.correo, item.nombre, item.apellido)"><i class="fa fa-ban"></i> Bloquear publicación</button>
             </div>

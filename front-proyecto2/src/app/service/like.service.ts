@@ -39,8 +39,8 @@ export class LikeService {
     )
   }
 
-  public getSingle(id:any) : Observable<any> {
-    let url = `${this.basePath}like/${id}`;
+  public getSingle(usuario:any, producto:any) : Observable<any> {
+    let url = `${this.basePath}like/${usuario}/${producto}`;
     return this.http.get(url, this.httpOptions)
     .pipe(
       catchError(this.handleError)

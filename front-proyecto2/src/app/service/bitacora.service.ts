@@ -39,6 +39,14 @@ export class BitacoraService {
     )
   }
 
+  public getAllDESC() : Observable<any> {
+    let url = `${this.basePath}bitacora/descendente`;
+    return this.http.get(url, this.httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
   public getSingle(id:any) : Observable<any> {
     let url = `${this.basePath}bitacora/${id}`;
     return this.http.get(url, this.httpOptions)

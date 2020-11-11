@@ -7,6 +7,7 @@ import { DenunciasComponent } from './denuncias/denuncias.component';
 import { DetalleProductoComponent } from './detalle-producto/detalle-producto.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { ProductosComponent } from './productos/productos.component';
+import { ReporteComponent } from './reporte/reporte.component';
 
 const pagesRoutes: Routes = [
     {
@@ -22,6 +23,7 @@ const pagesRoutes: Routes = [
     { path: 'productos', component: ProductosComponent },
     { path: 'producto/:id', component: DetalleProductoComponent },
     { path: 'carrito', component: CarritoComponent },
+    { path: 'reportes', component: ReporteComponent },
     
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];

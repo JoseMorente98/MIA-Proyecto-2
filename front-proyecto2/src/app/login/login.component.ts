@@ -71,20 +71,22 @@ export class LoginComponent implements OnInit {
           text: "Tu usuario no ha sido activado.",
           icon: "warning",
         });
+
       } else {
         swal({
           title: "Bienvenido",
           text: "Bienvenido a Marketplace.",
           icon: "success",
         });
+        localStorage.setItem("currentId", res.id);
+        localStorage.setItem("currentAuth", res.rol);
+        localStorage.setItem("currentCart", '[]');
+        localStorage.setItem("currentPicture", res.picture);
+        localStorage.setItem("currentEmail", res.email);
+        localStorage.setItem("currentNombre", res.nombre + " " + res.apellido);
+        this.router.navigate(['dashboard']);
       }
-      localStorage.setItem("currentId", res.id);
-      localStorage.setItem("currentAuth", res.rol);
-      localStorage.setItem("currentCart", '[]');
-      localStorage.setItem("currentPicture", res.picture);
-      localStorage.setItem("currentEmail", res.email);
-      localStorage.setItem("currentNombre", res.nombre + " " + res.apellido);
-      this.router.navigate(['dashboard']);
+      
     }, (err) => {
       swal({
         title: "Error",

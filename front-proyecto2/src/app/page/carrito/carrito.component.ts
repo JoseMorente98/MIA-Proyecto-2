@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { OrdenService } from 'src/app/service/orden.service';
+import { UsuarioService } from 'src/app/service/usuario.service';
 
 //SWAL
 declare var swal:any;
+//JQUERY
+declare var $:any;
 
 @Component({
   selector: 'app-carrito',
@@ -12,9 +16,12 @@ declare var swal:any;
 export class CarritoComponent implements OnInit {
   carrito:any[] = [];
   public total:number = 0;
+  public credito:number = 0;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private ordenService: OrdenService,
+    private usuarioService: UsuarioService
   ) { }
 
   goToRoute(strRoute:String) {
@@ -27,6 +34,7 @@ export class CarritoComponent implements OnInit {
       console.log(element.subtotal)
       this.total = this.total + (+element.subtotal)
     });
+    this.getSingle()
   }
 
   deleteCar(e:any) {
@@ -57,5 +65,50 @@ export class CarritoComponent implements OnInit {
       } else {}
     });
   }
+
+  saveChanges() {
+    if(this.credito < this.total) {
+      swal({
+        title: "Credito Insuficiente",
+        text: "No puede realizar la compra.",
+        icon: "error",
+      });
+      return;
+    }
+
+    let data = {
+      detalle: this.carrito,
+      usuario: +localStorage.getItem('currentId'),
+      total: this.total,
+      nombreCompleto: localStorage.getItem('currentNombre'),
+      correo: localStorage.getItem('currentEmail'),
+    }
+    console.log(data)
+    this.ordenService.create(data)
+    .subscribe((res) => {
+      console.log(res)
+      swal({
+        title: "Compra Exitosa",
+        text: "Su compra se ha realizado exitosamente",
+        icon: "success",
+      });
+    }, (error) => {
+      swal({
+        title: "Error",
+        text: "Ha ocurrido un error. Intente mas tarde nuevamente.",
+        icon: "error",
+      });
+    });
+  }
+
+  getSingle() {
+    this.usuarioService.getSingle(+localStorage.getItem('currentId'))
+    .subscribe((res) => {
+      console.log(res)
+      this.credito = res.credito;
+    }, (error) => {
+      console.log("Ha ocurrido un error.")
+    });
+  } 
 
 }

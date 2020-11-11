@@ -62,15 +62,49 @@
                 </div>
                 <div class="col-lg-3 col-md-6"></div>
             </div><br>
-            <div class="row">
+            <div *ngIf="!likeData">
+                <div class="row" >
+                    <div class="col-lg-3 col-md-6"></div>
+                    <div class="col-lg-3 col-md-6 divcont" style="text-align: center;">
+                        <button type="button" class="btn btn-outline-primary btn-rounded centerbut" (click)="createLikeDislike(1)"><i class="fa fa-thumbs-o-up"></i> Me Gusta</button>
+                    </div>
+                    <div class="col-lg-3 col-md-6 divcont" style="text-align: center;">
+                        <button type="button" class="btn btn-outline-danger btn-rounded centerbut" (click)="createLikeDislike(2)"><i class="fa fa-thumbs-o-down"></i> No Me Gusta</button>
+                    </div>
+                    <div class="col-lg-3 col-md-6"></div>
+                </div>
+            </div>
+            <div *ngIf="likeData">
+            <div class="row" *ngIf="likeData.estado == 0">
                 <div class="col-lg-3 col-md-6"></div>
                 <div class="col-lg-3 col-md-6 divcont" style="text-align: center;">
-                    <button type="button" class="btn btn-outline-primary btn-rounded centerbut active" (click)="restarCantidad()"><i class="fa fa-thumbs-o-up"></i> Me Gusta</button>
+                    <button type="button" class="btn btn-outline-primary btn-rounded centerbut" (click)="createLikeDislike(1)"><i class="fa fa-thumbs-o-up"></i> Me Gusta</button>
                 </div>
                 <div class="col-lg-3 col-md-6 divcont" style="text-align: center;">
-                    <button type="button" class="btn btn-outline-danger btn-rounded centerbut" (click)="sumarCantidad()"><i class="fa fa-thumbs-o-down"></i> No Me Gusta</button>
+                    <button type="button" class="btn btn-outline-danger btn-rounded centerbut" (click)="createLikeDislike(2)"><i class="fa fa-thumbs-o-down"></i> No Me Gusta</button>
                 </div>
                 <div class="col-lg-3 col-md-6"></div>
+            </div>
+            <div class="row" *ngIf="likeData.estado == 1">
+                <div class="col-lg-3 col-md-6"></div>
+                <div class="col-lg-3 col-md-6 divcont" style="text-align: center;">
+                    <button type="button" class="btn btn-outline-primary btn-rounded centerbut active" (click)="createLikeDislike(0)"><i class="fa fa-thumbs-o-up"></i> Me Gusta</button>
+                </div>
+                <div class="col-lg-3 col-md-6 divcont" style="text-align: center;">
+                    <button type="button" class="btn btn-outline-danger btn-rounded centerbut" (click)="createLikeDislike(2)"><i class="fa fa-thumbs-o-down"></i> No Me Gusta</button>
+                </div>
+                <div class="col-lg-3 col-md-6"></div>
+            </div>
+            <div class="row" *ngIf="likeData.estado == 2">
+                <div class="col-lg-3 col-md-6"></div>
+                <div class="col-lg-3 col-md-6 divcont" style="text-align: center;">
+                    <button type="button" class="btn btn-outline-primary btn-rounded centerbut" (click)="createLikeDislike(1)"><i class="fa fa-thumbs-o-up"></i> Me Gusta</button>
+                </div>
+                <div class="col-lg-3 col-md-6 divcont" style="text-align: center;">
+                    <button type="button" class="btn btn-outline-danger btn-rounded centerbut active" (click)="createLikeDislike(0)"><i class="fa fa-thumbs-o-down"></i> No Me Gusta</button>
+                </div>
+                <div class="col-lg-3 col-md-6"></div>
+            </div>
             </div>
         </div>
         <div class="container">

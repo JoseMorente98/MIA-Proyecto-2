@@ -14,8 +14,8 @@ import { ProductosComponent } from './productos/productos.component';
 import { CarritoComponent } from './carrito/carrito.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { DetalleProductoComponent } from './detalle-producto/detalle-producto.component';
-
-
+import { SimpleNotificationsModule } from 'angular2-notifications';
+import { ReporteComponent } from './reporte/reporte.component';
 
 @NgModule({
   declarations: 
@@ -28,7 +28,8 @@ import { DetalleProductoComponent } from './detalle-producto/detalle-producto.co
     ChatsComponent,
     ProductosComponent,
     CarritoComponent,
-    DetalleProductoComponent
+    DetalleProductoComponent,
+    ReporteComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +38,8 @@ import { DetalleProductoComponent } from './detalle-producto/detalle-producto.co
     ReactiveFormsModule,
     RouterModule,
     SharedModule,
-    PAGES_ROUTES
+    PAGES_ROUTES,
+    SimpleNotificationsModule.forRoot()
   ]
 })
 export class PageModule { }
