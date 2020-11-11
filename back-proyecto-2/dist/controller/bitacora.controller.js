@@ -43,12 +43,12 @@ var oracle_1 = __importDefault(require("../oracle/oracle"));
 var BitacoraController = /** @class */ (function () {
     function BitacoraController() {
         var _this = this;
-        this.getAll = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        this.getAllASC = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var query, result, data_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "\n            SELECT * FROM BITACORA\n        ";
+                        query = "\n            SELECT * FROM BITACORA\n            INNER JOIN USUARIO ON BITACORA.USUARIO = USUARIO.ID\n            ORDER BY BITACORA.FECHA ASC\n        ";
                         return [4 /*yield*/, oracle_1.default.selectQuery(query)];
                     case 1:
                         result = _a.sent();
@@ -57,7 +57,9 @@ var BitacoraController = /** @class */ (function () {
                             result.rows.map(function (element) {
                                 var dataSchema = {
                                     "id": element[0],
-                                    "nombre": element[1]
+                                    "descripcion": element[1],
+                                    "fecha": element[2],
+                                    "email": element[7],
                                 };
                                 data_1.push(dataSchema);
                             });
@@ -74,8 +76,41 @@ var BitacoraController = /** @class */ (function () {
                 }
             });
         }); };
+        this.getAllDESC = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var query, result, data_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "\n            SELECT * FROM BITACORA\n            INNER JOIN USUARIO ON BITACORA.USUARIO = USUARIO.ID\n            ORDER BY BITACORA.FECHA DESC\n        ";
+                        return [4 /*yield*/, oracle_1.default.selectQuery(query)];
+                    case 1:
+                        result = _a.sent();
+                        if (result) {
+                            data_2 = [];
+                            result.rows.map(function (element) {
+                                var dataSchema = {
+                                    "id": element[0],
+                                    "descripcion": element[1],
+                                    "fecha": element[2],
+                                    "email": element[7],
+                                };
+                                data_2.push(dataSchema);
+                            });
+                            return [2 /*return*/, res.json(data_2)];
+                        }
+                        else {
+                            return [2 /*return*/, res.status(400).json({
+                                    ok: false,
+                                    status: 400,
+                                    error: "No existen datos."
+                                })];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
         this.getSingle = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var body, query, result, data_2;
+            var body, query, result, data_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -87,16 +122,16 @@ var BitacoraController = /** @class */ (function () {
                     case 1:
                         result = _a.sent();
                         if (result) {
-                            data_2 = [];
+                            data_3 = [];
                             result.rows.map(function (element) {
                                 var dataSchema = {
                                     "id": element[0],
                                     "nombre": element[1]
                                 };
-                                data_2.push(dataSchema);
+                                data_3.push(dataSchema);
                             });
-                            if (data_2.length > 0) {
-                                return [2 /*return*/, res.json(data_2[0])];
+                            if (data_3.length > 0) {
+                                return [2 /*return*/, res.json(data_3[0])];
                             }
                             else {
                                 return [2 /*return*/, res.status(400).json({

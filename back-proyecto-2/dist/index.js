@@ -19,6 +19,9 @@ var denuncia_router_1 = __importDefault(require("./router/denuncia.router"));
 var comentario_router_1 = __importDefault(require("./router/comentario.router"));
 var like_router_1 = __importDefault(require("./router/like.router"));
 var bitacora_router_1 = __importDefault(require("./router/bitacora.router"));
+var mensaje_router_1 = __importDefault(require("./router/mensaje.router"));
+var orden_router_1 = __importDefault(require("./router/orden.router"));
+var reporte_router_1 = __importDefault(require("./router/reporte.router"));
 /**
  * HTTP CORS
  */
@@ -46,9 +49,12 @@ server.app.use(api, denuncia_router_1.default);
 server.app.use(api, comentario_router_1.default);
 server.app.use(api, like_router_1.default);
 server.app.use(api, bitacora_router_1.default);
+server.app.use(api, mensaje_router_1.default);
+server.app.use(api, orden_router_1.default);
+server.app.use(api, reporte_router_1.default);
 /**
  * INICIA SERVIDOR
  */
-server.start(function () {
+server.startSocket(function () {
     console.log("Servidor corriendo en el puerto " + PORT + " :D");
 });

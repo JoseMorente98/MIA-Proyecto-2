@@ -1,11 +1,18 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
+var socketIO = require("socket.io");
 var path = require("path");
+var http = require("http");
+var socket_1 = __importDefault(require("../socket/socket"));
 var Server = /** @class */ (function () {
     function Server(port) {
         this.port = port;
         this.app = express();
+        this.serverSocket = http.createServer(this.app);
     }
     Server.init = function (port) {
         return new Server(port);
@@ -16,6 +23,18 @@ var Server = /** @class */ (function () {
     };
     Server.prototype.start = function (callback) {
         this.app.listen(this.port, callback);
+        this.publicFolder();
+    };
+    /**
+     * SOCKET.IO
+     */
+    Server.prototype.startSocket = function (callback) {
+        var io = socketIO(this.serverSocket);
+        /**
+         * INSTANCIA DE SOCKETS
+         */
+        socket_1.default.getInstance().listenServer(io);
+        this.serverSocket.listen(this.port, callback);
         this.publicFolder();
     };
     return Server;

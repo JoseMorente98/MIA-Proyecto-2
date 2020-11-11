@@ -48,7 +48,7 @@ var ProductoController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "\n            SELECT * FROM PRODUCTO\n        ";
+                        query = "\n            SELECT * FROM PRODUCTO\n            WHERE PRODUCTO.ESTADO = 1\n        ";
                         return [4 /*yield*/, oracle_1.default.selectQuery(query)];
                     case 1:
                         result = _a.sent();
@@ -64,6 +64,7 @@ var ProductoController = /** @class */ (function () {
                                     "precio": element[5],
                                     "categoria": element[6],
                                     "usuario": element[7],
+                                    "estado": element[8],
                                 };
                                 data_1.push(dataSchema);
                             });
@@ -80,7 +81,7 @@ var ProductoController = /** @class */ (function () {
                 }
             });
         }); };
-        this.getSingle = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        this.getAllCategorias = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var body, query, result, data_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -88,7 +89,7 @@ var ProductoController = /** @class */ (function () {
                         body = {
                             id: req.params.id
                         };
-                        query = "\n            SELECT * FROM PRODUCTO WHERE id = " + body.id + "\n        ";
+                        query = "\n            SELECT * FROM PRODUCTO\n            WHERE categoria = " + body.id + " AND ESTADO = 1\n        ";
                         return [4 /*yield*/, oracle_1.default.selectQuery(query)];
                     case 1:
                         result = _a.sent();
@@ -104,11 +105,132 @@ var ProductoController = /** @class */ (function () {
                                     "precio": element[5],
                                     "categoria": element[6],
                                     "usuario": element[7],
+                                    "estado": element[8],
                                 };
                                 data_2.push(dataSchema);
                             });
-                            if (data_2.length > 0) {
-                                return [2 /*return*/, res.json(data_2[0])];
+                            return [2 /*return*/, res.json(data_2)];
+                        }
+                        else {
+                            return [2 /*return*/, res.status(400).json({
+                                    ok: false,
+                                    status: 400,
+                                    error: "No existen datos."
+                                })];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        this.getAllASC = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var query, result, data_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "\n            SELECT * FROM PRODUCTO\n            WHERE PRODUCTO.ESTADO = 1\n            ORDER BY PRECIO ASC\n        ";
+                        return [4 /*yield*/, oracle_1.default.selectQuery(query)];
+                    case 1:
+                        result = _a.sent();
+                        console.log("CONSULTA");
+                        console.log(result);
+                        if (result) {
+                            data_3 = [];
+                            result.rows.map(function (element) {
+                                var dataSchema = {
+                                    "id": element[0],
+                                    "nombre": element[1],
+                                    "descripcion": element[2],
+                                    "clave": element[3],
+                                    "picture": element[4],
+                                    "precio": element[5],
+                                    "categoria": element[6],
+                                    "usuario": element[7],
+                                    "estado": element[8],
+                                };
+                                data_3.push(dataSchema);
+                            });
+                            return [2 /*return*/, res.json(data_3)];
+                        }
+                        else {
+                            return [2 /*return*/, res.status(400).json({
+                                    ok: false,
+                                    status: 400,
+                                    error: "No existen datos."
+                                })];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        this.getAllDESC = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var query, result, data_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "\n            SELECT * FROM PRODUCTO\n            WHERE PRODUCTO.ESTADO = 1\n            ORDER BY precio DESC\n        ";
+                        return [4 /*yield*/, oracle_1.default.selectQuery(query)];
+                    case 1:
+                        result = _a.sent();
+                        console.log(result);
+                        if (result) {
+                            data_4 = [];
+                            result.rows.map(function (element) {
+                                var dataSchema = {
+                                    "id": element[0],
+                                    "nombre": element[1],
+                                    "descripcion": element[2],
+                                    "clave": element[3],
+                                    "picture": element[4],
+                                    "precio": element[5],
+                                    "categoria": element[6],
+                                    "usuario": element[7],
+                                    "estado": element[8],
+                                };
+                                data_4.push(dataSchema);
+                            });
+                            return [2 /*return*/, res.json(data_4)];
+                        }
+                        else {
+                            return [2 /*return*/, res.status(400).json({
+                                    ok: false,
+                                    status: 400,
+                                    error: "No existen datos."
+                                })];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        this.getSingle = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var body, query, result, data_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        body = {
+                            id: req.params.id
+                        };
+                        query = "\n            SELECT * FROM PRODUCTO WHERE id = " + body.id + "\n        ";
+                        return [4 /*yield*/, oracle_1.default.selectQuery(query)];
+                    case 1:
+                        result = _a.sent();
+                        if (result) {
+                            data_5 = [];
+                            result.rows.map(function (element) {
+                                var dataSchema = {
+                                    "id": element[0],
+                                    "nombre": element[1],
+                                    "descripcion": element[2],
+                                    "clave": element[3],
+                                    "picture": element[4],
+                                    "precio": element[5],
+                                    "categoria": element[6],
+                                    "usuario": element[7],
+                                    "estado": element[8],
+                                };
+                                data_5.push(dataSchema);
+                            });
+                            if (data_5.length > 0) {
+                                return [2 /*return*/, res.json(data_5[0])];
                             }
                             else {
                                 return [2 /*return*/, res.status(400).json({

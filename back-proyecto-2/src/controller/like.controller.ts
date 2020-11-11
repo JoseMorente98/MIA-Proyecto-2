@@ -112,7 +112,27 @@ export default class LikeController {
                 if(data[0].estado == 0) {
                     const query3 = `
                         UPDATE MEGUSTA SET 
-                        estado = 1
+                        estado = ${body.estado}
+                        WHERE usuario = ${body.usuario} AND producto = ${body.producto}
+                    `;
+                    let result3:any = await OracleConnection.executeQuery(query3);
+                    if(result3) {            
+                        return res.json({
+                            ok: true,
+                            status: 200,
+                            data: "Datos actualizados correctamente :D"
+                        });
+                    } else {
+                        return res.status(400).json({
+                            ok: false,
+                            status: 400,
+                            error: "Ha ocurrido un error."
+                        });
+                    }
+                } else if(data[0].estado == 1) {
+                    const query3 = `
+                        UPDATE MEGUSTA SET 
+                        estado = ${body.estado}
                         WHERE usuario = ${body.usuario} AND producto = ${body.producto}
                     `;
                     let result3:any = await OracleConnection.executeQuery(query3);
@@ -132,7 +152,7 @@ export default class LikeController {
                 } else {
                     const query4 = `
                         UPDATE MEGUSTA SET 
-                        estado = 0
+                        estado = ${body.estado}
                         WHERE usuario = ${body.usuario} AND producto = ${body.producto}
                     `;
                     let result4:any = await OracleConnection.executeQuery(query4);
@@ -173,11 +193,26 @@ export default class LikeController {
                 }
             }  
         } else {
-            return res.status(400).json({
-                ok: false,
-                status: 400,
-                error: "No existen datos."
-            });
+            const query2 = `
+                INSERT INTO MEGUSTA(estado, producto, usuario) 
+                VALUES (${body.estado}, ${body.producto},
+                ${body.usuario})
+            `;
+            
+            let result2:any = await OracleConnection.executeQuery(query2);
+            if(result2) {            
+                return res.json({
+                    ok: true,
+                    status: 200,
+                    data: "Datos agregados correctamente :D"
+                });
+            } else {
+                return res.status(400).json({
+                    ok: false,
+                    status: 400,
+                    error: "Ha ocurrido un error."
+                });
+            }
         }
 
     }

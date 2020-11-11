@@ -8,6 +8,9 @@ var producto_controller_1 = __importDefault(require("../controller/producto.cont
 var router = express_1.Router();
 router.get('/producto', producto_controller_1.default.getInstance().getAll);
 router.get('/producto/:id', producto_controller_1.default.getInstance().getSingle);
+router.get('/producto/categoria/:id', producto_controller_1.default.getInstance().getAllCategorias);
+router.get('/ascendente', producto_controller_1.default.getInstance().getAllASC);
+router.get('/descendente', producto_controller_1.default.getInstance().getAllDESC);
 router.post('/producto', producto_controller_1.default.getInstance().create);
 router.put('/producto/:id', producto_controller_1.default.getInstance().update);
 router.delete('/producto/:id', producto_controller_1.default.getInstance().delete);

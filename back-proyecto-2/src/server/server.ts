@@ -1,13 +1,18 @@
 import express = require('express');
+import socketIO = require('socket.io');
 import path = require('path');
+import http = require('http');
+import SocketServer from '../socket/socket';
 
 export default class Server {
     public app: express.Application;
     public port: number;
+    public serverSocket: any;
 
     constructor(port:number) {
         this.port = port;
         this.app = express();
+        this.serverSocket = http.createServer(this.app)
     }
 
     static init(port:number) {
@@ -23,5 +28,20 @@ export default class Server {
         this.app.listen(this.port, callback);
         this.publicFolder();
        
+    }
+
+    /**
+     * SOCKET.IO
+     */
+    startSocket(callback: any) {
+        let io = socketIO(this.serverSocket);
+        
+        /**
+         * INSTANCIA DE SOCKETS
+         */
+        SocketServer.getInstance().listenServer(io);
+        
+        this.serverSocket.listen(this.port, callback);
+        this.publicFolder();
     }
 }

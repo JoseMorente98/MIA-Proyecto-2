@@ -16,6 +16,9 @@ import denuncia from "./router/denuncia.router";
 import comentario from "./router/comentario.router";
 import like from "./router/like.router";
 import bitacora from "./router/bitacora.router";
+import mensaje from "./router/mensaje.router";
+import orden from "./router/orden.router";
+import reporte from "./router/reporte.router";
 
 /**
  * HTTP CORS
@@ -45,11 +48,14 @@ server.app.use(api, denuncia);
 server.app.use(api, comentario);
 server.app.use(api, like);
 server.app.use(api, bitacora);
+server.app.use(api, mensaje);
+server.app.use(api, orden);
+server.app.use(api, reporte);
 
 /**
  * INICIA SERVIDOR
  */
-server.start(()=> {
+server.startSocket(()=> {
   console.log(`Servidor corriendo en el puerto ${PORT} :D`)
 });
 

@@ -15,6 +15,7 @@ export default class ProductoController {
     getAll = async (req: any, res: Response) => {
         const query = `
             SELECT * FROM PRODUCTO
+            WHERE PRODUCTO.ESTADO = 1
         `;
         
         let result:any = await OracleConnection.selectQuery(query);
@@ -30,6 +31,117 @@ export default class ProductoController {
                     "precio": element[5],
                     "categoria": element[6],
                     "usuario": element[7],
+                    "estado": element[8],
+                }
+                data.push(dataSchema);
+            });
+            
+            return res.json(data)
+        } else {
+            return res.status(400).json({
+                ok: false,
+                status: 400,
+                error: "No existen datos."
+            });
+        }
+    }
+
+    getAllCategorias = async (req: any, res: Response) => {
+        let body = {
+            id : req.params.id
+        }
+        const query = `
+            SELECT * FROM PRODUCTO
+            WHERE categoria = ${body.id} AND ESTADO = 1
+        `;
+        
+        let result:any = await OracleConnection.selectQuery(query);
+        if(result) {
+            let data:any[] = [];
+            result.rows.map((element: any[]) => {
+                let dataSchema = {
+                    "id": element[0],
+                    "nombre": element[1],
+                    "descripcion": element[2],
+                    "clave": element[3],
+                    "picture": element[4],
+                    "precio": element[5],
+                    "categoria": element[6],
+                    "usuario": element[7],
+                    "estado": element[8],
+                }
+                data.push(dataSchema);
+            });
+            
+            return res.json(data)
+        } else {
+            return res.status(400).json({
+                ok: false,
+                status: 400,
+                error: "No existen datos."
+            });
+        }
+    }
+
+    getAllASC= async (req: any, res: Response) => {
+        const query = `
+            SELECT * FROM PRODUCTO
+            WHERE PRODUCTO.ESTADO = 1
+            ORDER BY PRECIO ASC
+        `;
+        
+        let result:any = await OracleConnection.selectQuery(query);
+        console.log("CONSULTA")
+        console.log(result)
+        if(result) {
+            let data:any[] = [];
+            result.rows.map((element: any[]) => {
+                let dataSchema = {
+                    "id": element[0],
+                    "nombre": element[1],
+                    "descripcion": element[2],
+                    "clave": element[3],
+                    "picture": element[4],
+                    "precio": element[5],
+                    "categoria": element[6],
+                    "usuario": element[7],
+                    "estado": element[8],
+                }
+                data.push(dataSchema);
+            });
+            
+            return res.json(data)
+        } else {
+            return res.status(400).json({
+                ok: false,
+                status: 400,
+                error: "No existen datos."
+            });
+        }
+    }
+
+    getAllDESC = async (req: any, res: Response) => {
+        const query = `
+            SELECT * FROM PRODUCTO
+            WHERE PRODUCTO.ESTADO = 1
+            ORDER BY precio DESC
+        `;
+        
+        let result:any = await OracleConnection.selectQuery(query);
+        console.log(result)
+        if(result) {
+            let data:any[] = [];
+            result.rows.map((element: any[]) => {
+                let dataSchema = {
+                    "id": element[0],
+                    "nombre": element[1],
+                    "descripcion": element[2],
+                    "clave": element[3],
+                    "picture": element[4],
+                    "precio": element[5],
+                    "categoria": element[6],
+                    "usuario": element[7],
+                    "estado": element[8],
                 }
                 data.push(dataSchema);
             });
@@ -66,6 +178,7 @@ export default class ProductoController {
                     "precio": element[5],
                     "categoria": element[6],
                     "usuario": element[7],
+                    "estado": element[8],
                 }
                 data.push(dataSchema);
             });

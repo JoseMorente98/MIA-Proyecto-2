@@ -123,7 +123,7 @@ var LikeController = /** @class */ (function () {
             });
         }); };
         this.create = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var body, query, result, data_3, query3, result3, query4, result4, query2, result2;
+            var body, query, result, data_3, query3, result3, query3, result3, query4, result4, query2, result2, query2, result2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -136,7 +136,7 @@ var LikeController = /** @class */ (function () {
                         return [4 /*yield*/, oracle_1.default.selectQuery(query)];
                     case 1:
                         result = _a.sent();
-                        if (!result) return [3 /*break*/, 9];
+                        if (!result) return [3 /*break*/, 11];
                         data_3 = [];
                         result.rows.map(function (element) {
                             var dataSchema = {
@@ -147,9 +147,9 @@ var LikeController = /** @class */ (function () {
                             };
                             data_3.push(dataSchema);
                         });
-                        if (!(data_3.length > 0)) return [3 /*break*/, 6];
+                        if (!(data_3.length > 0)) return [3 /*break*/, 8];
                         if (!(data_3[0].estado == 0)) return [3 /*break*/, 3];
-                        query3 = "\n                        UPDATE MEGUSTA SET \n                        estado = 1\n                        WHERE usuario = " + body.usuario + " AND producto = " + body.producto + "\n                    ";
+                        query3 = "\n                        UPDATE MEGUSTA SET \n                        estado = " + body.estado + "\n                        WHERE usuario = " + body.usuario + " AND producto = " + body.producto + "\n                    ";
                         return [4 /*yield*/, oracle_1.default.executeQuery(query3)];
                     case 2:
                         result3 = _a.sent();
@@ -167,11 +167,32 @@ var LikeController = /** @class */ (function () {
                                     error: "Ha ocurrido un error."
                                 })];
                         }
-                        return [3 /*break*/, 5];
+                        return [3 /*break*/, 7];
                     case 3:
-                        query4 = "\n                        UPDATE MEGUSTA SET \n                        estado = 0\n                        WHERE usuario = " + body.usuario + " AND producto = " + body.producto + "\n                    ";
-                        return [4 /*yield*/, oracle_1.default.executeQuery(query4)];
+                        if (!(data_3[0].estado == 1)) return [3 /*break*/, 5];
+                        query3 = "\n                        UPDATE MEGUSTA SET \n                        estado = " + body.estado + "\n                        WHERE usuario = " + body.usuario + " AND producto = " + body.producto + "\n                    ";
+                        return [4 /*yield*/, oracle_1.default.executeQuery(query3)];
                     case 4:
+                        result3 = _a.sent();
+                        if (result3) {
+                            return [2 /*return*/, res.json({
+                                    ok: true,
+                                    status: 200,
+                                    data: "Datos actualizados correctamente :D"
+                                })];
+                        }
+                        else {
+                            return [2 /*return*/, res.status(400).json({
+                                    ok: false,
+                                    status: 400,
+                                    error: "Ha ocurrido un error."
+                                })];
+                        }
+                        return [3 /*break*/, 7];
+                    case 5:
+                        query4 = "\n                        UPDATE MEGUSTA SET \n                        estado = " + body.estado + "\n                        WHERE usuario = " + body.usuario + " AND producto = " + body.producto + "\n                    ";
+                        return [4 /*yield*/, oracle_1.default.executeQuery(query4)];
+                    case 6:
                         result4 = _a.sent();
                         if (result4) {
                             return [2 /*return*/, res.json({
@@ -187,12 +208,12 @@ var LikeController = /** @class */ (function () {
                                     error: "Ha ocurrido un error."
                                 })];
                         }
-                        _a.label = 5;
-                    case 5: return [3 /*break*/, 8];
-                    case 6:
+                        _a.label = 7;
+                    case 7: return [3 /*break*/, 10];
+                    case 8:
                         query2 = "\n                    INSERT INTO MEGUSTA(estado, producto, usuario) \n                    VALUES (" + body.estado + ", " + body.producto + ",\n                    " + body.usuario + ")\n                ";
                         return [4 /*yield*/, oracle_1.default.executeQuery(query2)];
-                    case 7:
+                    case 9:
                         result2 = _a.sent();
                         if (result2) {
                             return [2 /*return*/, res.json({
@@ -208,14 +229,29 @@ var LikeController = /** @class */ (function () {
                                     error: "Ha ocurrido un error."
                                 })];
                         }
-                        _a.label = 8;
-                    case 8: return [3 /*break*/, 10];
-                    case 9: return [2 /*return*/, res.status(400).json({
-                            ok: false,
-                            status: 400,
-                            error: "No existen datos."
-                        })];
-                    case 10: return [2 /*return*/];
+                        _a.label = 10;
+                    case 10: return [3 /*break*/, 13];
+                    case 11:
+                        query2 = "\n                INSERT INTO MEGUSTA(estado, producto, usuario) \n                VALUES (" + body.estado + ", " + body.producto + ",\n                " + body.usuario + ")\n            ";
+                        return [4 /*yield*/, oracle_1.default.executeQuery(query2)];
+                    case 12:
+                        result2 = _a.sent();
+                        if (result2) {
+                            return [2 /*return*/, res.json({
+                                    ok: true,
+                                    status: 200,
+                                    data: "Datos agregados correctamente :D"
+                                })];
+                        }
+                        else {
+                            return [2 /*return*/, res.status(400).json({
+                                    ok: false,
+                                    status: 400,
+                                    error: "Ha ocurrido un error."
+                                })];
+                        }
+                        _a.label = 13;
+                    case 13: return [2 /*return*/];
                 }
             });
         }); };
