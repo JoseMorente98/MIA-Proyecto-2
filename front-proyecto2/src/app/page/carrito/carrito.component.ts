@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { BitacoraService } from 'src/app/service/bitacora.service';
 import { OrdenService } from 'src/app/service/orden.service';
 import { UsuarioService } from 'src/app/service/usuario.service';
 
@@ -21,7 +22,8 @@ export class CarritoComponent implements OnInit {
   constructor(
     private router: Router,
     private ordenService: OrdenService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private bitacoraService: BitacoraService,
   ) { }
 
   goToRoute(strRoute:String) {
@@ -92,6 +94,7 @@ export class CarritoComponent implements OnInit {
         text: "Su compra se ha realizado exitosamente",
         icon: "success",
       });
+      this.createBitacora();
     }, (error) => {
       swal({
         title: "Error",
@@ -110,5 +113,18 @@ export class CarritoComponent implements OnInit {
       console.log("Ha ocurrido un error.")
     });
   } 
+
+  createBitacora() {
+    let data = {
+      descripcion: 'Se ha realizado una compra.',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
+    });
+  }
 
 }

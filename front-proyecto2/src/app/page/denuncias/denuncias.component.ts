@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BitacoraService } from 'src/app/service/bitacora.service';
 import { DenunciaService } from 'src/app/service/denuncia.service';
 
 //SWAL
@@ -13,7 +14,8 @@ export class DenunciasComponent implements OnInit {
   public data:any[] = [];
 
   constructor(
-    public denunciaService: DenunciaService
+    public denunciaService: DenunciaService,
+    private bitacoraService: BitacoraService,
   ) { }
 
   ngOnInit(): void {
@@ -49,6 +51,7 @@ export class DenunciasComponent implements OnInit {
         text: "El producto ha sido bloqueado exitosamente.",
         icon: "success",
       });
+      this.createBitacora();
       this.getAll();
     }, (error) => {
       swal({
@@ -56,6 +59,19 @@ export class DenunciasComponent implements OnInit {
         text: "Ha ocurrido un error. Intente mas tarde nuevamente.",
         icon: "error",
       });
+    });
+  }
+
+  createBitacora() {
+    let data = {
+      descripcion: 'Se ha bloqueado una publicación.',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
     });
   }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsuarioService } from 'src/app/service/usuario.service';
 import { UploadFileService } from 'src/app/service/upload-file.service';
+import { BitacoraService } from 'src/app/service/bitacora.service';
 
 //SWAL
 declare var swal:any;
@@ -21,7 +22,8 @@ export class PerfilComponent implements OnInit {
 
   constructor(
     private usuarioService: UsuarioService,
-    private uploadFileService: UploadFileService
+    private uploadFileService: UploadFileService,
+    private bitacoraService: BitacoraService,
   ) { }
 
   ngOnInit(): void {
@@ -76,6 +78,7 @@ export class PerfilComponent implements OnInit {
         text: "Su usuario ha sido actualizado exitosamente.",
         icon: "success",
       });
+      this.createBitacora();
       localStorage.setItem("currentPicture", this.formData.value.picture);
       localStorage.setItem("currentEmail", this.formData.value.email);
       localStorage.setItem("currentNombre", this.formData.value.nombre + " " + this.formData.value.apellido);
@@ -97,6 +100,7 @@ export class PerfilComponent implements OnInit {
         text: "Ingresa con tu correo "+res.email + " y tu nueva contraseña.",
         icon: "success",
       });
+      this.updateBitacora();
       this.initializeFormReset()
     }, (err) => {
       swal({
@@ -156,7 +160,31 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  
+  createBitacora() {
+    let data = {
+      descripcion: 'Se ha actualizado tu perfil.',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
+    });
+  }
+
+  updateBitacora() {
+    let data = {
+      descripcion: 'Se ha actualizado tu contrasena.',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
+    });
+  }
 
   get nombre() { return this.formData.get('nombre'); }
   get apellido() { return this.formData.get('apellido'); }

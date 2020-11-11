@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UploadFileService } from 'src/app/service/upload-file.service';
 import { CategoriaService } from 'src/app/service/categoria.service';
+import { BitacoraService } from 'src/app/service/bitacora.service';
 
 //SWAL
 declare var swal:any;
@@ -37,6 +38,7 @@ export class CategoriasComponent implements OnInit {
   constructor(
     private uploadFileService: UploadFileService,
     private categoriaService: CategoriaService,
+    private bitacoraService: BitacoraService,
     private router: Router
   ) { }
 
@@ -126,6 +128,7 @@ export class CategoriasComponent implements OnInit {
         text: "La categoría ha sido registrada exitosamente.",
         icon: "success",
       });
+      this.createBitacora();
       this.getAll();
       this.initializeForm();
     }, (error) => {
@@ -147,6 +150,7 @@ export class CategoriasComponent implements OnInit {
         text: "La categoría ha sido actualizada exitosamente.",
         icon: "success",
       });
+      this.updateBitacora()
       this.getAll();
       this.initializeForm();
     }, (error) => {
@@ -203,6 +207,32 @@ export class CategoriasComponent implements OnInit {
     this.formData.get('picture').setValue(item.picture);
     this.formData.get('id').setValue(item.id);
     this.strImage = item.picture;
+  }
+
+  createBitacora() {
+    let data = {
+      descripcion: 'Se ha agregado una categoria.',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
+    });
+  }
+
+  updateBitacora() {
+    let data = {
+      descripcion: 'Se ha actualizado una categoria.',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
+    });
   }
 
 }

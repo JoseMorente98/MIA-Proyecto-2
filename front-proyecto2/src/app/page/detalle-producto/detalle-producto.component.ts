@@ -5,6 +5,7 @@ import { ProductoService } from 'src/app/service/producto.service';
 import { ComentarioService } from 'src/app/service/comentario.service';
 import { DenunciaService } from 'src/app/service/denuncia.service';
 import { LikeService } from 'src/app/service/like.service';
+import { BitacoraService } from 'src/app/service/bitacora.service';
 
 //SWAL
 declare var swal:any;
@@ -29,7 +30,8 @@ export class DetalleProductoComponent implements OnInit {
     private productoService: ProductoService,
     private comentarioService: ComentarioService,
     private denunciaService: DenunciaService,
-    private likeService: LikeService
+    private likeService: LikeService,
+    private bitacoraService: BitacoraService,
   ) { }
 
   ngOnInit(): void {
@@ -118,6 +120,7 @@ export class DetalleProductoComponent implements OnInit {
         text: "El comentario ha sido registrado exitosamente.",
         icon: "success",
       });
+      this.createBitacoraComentario()
       this.getAllComentarios();
       this.initializeForm();
     }, (error) => {
@@ -140,6 +143,7 @@ export class DetalleProductoComponent implements OnInit {
         text: "La denuncia ha sido registrada exitosamente.",
         icon: "success",
       });
+      this.createBitacoraDenuncia()
       this.getAllDenuncia();
       this.initializeForm();
     }, (error) => {
@@ -165,6 +169,7 @@ export class DetalleProductoComponent implements OnInit {
         text: "Te gusta el producto :D",
         icon: "success",
       });
+      this.createBitacora();
       this.getLike();
     }, (error) => {
       swal({
@@ -198,5 +203,44 @@ export class DetalleProductoComponent implements OnInit {
   }
 
   get descripcion() { return this.formData.get('descripcion'); }
+
+  createBitacora() {
+    let data = {
+      descripcion: 'Ha reaccionado a un producto.',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
+    });
+  }
+
+  createBitacoraComentario() {
+    let data = {
+      descripcion: 'Ha realizado un comentario.',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
+    });
+  }
+
+  createBitacoraDenuncia() {
+    let data = {
+      descripcion: 'Ha realizado una denuncia.',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
+    });
+  }
 
 }

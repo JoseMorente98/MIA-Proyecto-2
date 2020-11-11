@@ -263,6 +263,7 @@ export class ProductosComponent implements OnInit {
         text: "El producto ha sido actualizado exitosamente.",
         icon: "success",
       });
+      this.createBitacora();
       this.getAllProductos();
       this.initializeForm();
     }, (error) => {
@@ -305,6 +306,19 @@ export class ProductosComponent implements OnInit {
   createBitacora() {
     let data = {
       descripcion: 'Se ha registrado un nuevo producto',
+      usuario: +localStorage.getItem('currentId')
+    }
+    this.bitacoraService.create(data)
+    .subscribe((res) => {
+      console.log("EXITO: Bitacora registrada")
+    }, (error) => {
+      console.error("ERROR: Registro bitacora")
+    });
+  }
+
+  updateBitacora() {
+    let data = {
+      descripcion: 'Se ha actualizado un producto',
       usuario: +localStorage.getItem('currentId')
     }
     this.bitacoraService.create(data)
